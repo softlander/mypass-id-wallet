@@ -1,0 +1,21 @@
+{
+    "appId": "com.iota.selv.demo",
+    "appName": "Selv",
+    "bundledWebRuntime": true,
+    "npmClient": "yarn",
+    "webDir": ".build",
+    "plugins": {
+        "SplashScreen": {
+            "launchShowDuration": 3000,
+            "launchAutoHide": true,
+            "androidSplashResourceName": "splash",
+            "androidScaleType": "CENTER_CROP",
+            "splashFullScreen": false,
+            "splashImmersive": true
+        },
+        "Keyboard": {
+            "resize": "none"
+        }
+    },
+    "server": {}
+}

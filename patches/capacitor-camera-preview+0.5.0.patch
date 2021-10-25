@@ -1,0 +1,70 @@
+diff --git a/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java b/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
+index f429ccb..ac016aa 100644
+--- a/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
++++ b/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
+@@ -641,7 +641,15 @@ public class CameraActivity extends Fragment {
+           params.setRotation(mPreview.getDisplayOrientation());
+ 
+           mCamera.setParameters(params);
+-          mCamera.takePicture(shutterCallback, null, jpegPictureCallback);
++
++          Camera.CameraInfo info = new Camera.CameraInfo();
++          Camera.getCameraInfo(defaultCameraId, info);
++
++          if (info.canDisableShutterSound) {
++            mCamera.enableShutterSound(false);
++          }
++          
++          mCamera.takePicture(null, null, jpegPictureCallback);
+         }
+       }.start();
+     } else {
+diff --git a/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift b/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
+index 477eeaa..6c36bbc 100644
+--- a/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
++++ b/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
+@@ -203,6 +203,10 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
+             self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)
+         }
+     }
++
++    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
++        AudioServicesDisposeSystemSoundID(1108)
++    }
+ }
+ 
+ 
+diff --git a/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift b/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
+index baa1be9..e47fc3f 100644
+--- a/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
++++ b/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
+@@ -13,7 +13,9 @@ public class CameraPreview: CAPPlugin {
+     let cameraController = CameraController()
+     
+     @objc func rotated() {
+-        self.previewView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
++        if self.previewView != nil {
++            self.previewView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
++        }
+         self.cameraController.previewLayer?.frame = self.previewView.frame
+         
+         if UIDevice.current.orientation.isLandscape {
+@@ -72,10 +74,14 @@ public class CameraPreview: CAPPlugin {
+ 
+     @objc func stop(_ call: CAPPluginCall) {
+         DispatchQueue.main.async {
+-            self.cameraController.captureSession?.stopRunning()
+-            self.previewView.removeFromSuperview()
+-            self.webView.isOpaque = true
+-            call.resolve()
++            if (self.cameraController.captureSession?.isRunning ?? false) {
++                self.cameraController.captureSession?.stopRunning()
++                self.previewView.removeFromSuperview()
++                self.webView.isOpaque = true
++                call.resolve()
++            } else {
++                call.reject("camera already stopped")
++            }
+         }
+     }
+ 
