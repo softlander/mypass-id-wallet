@@ -61,6 +61,38 @@ export type PersonalData = {
 };
 
 /**
+ * Highest degree credential data
+ */
+export type HighestDegreeDetails = {
+    Language: string;
+    Locale: string;
+    HighestDegreeData: {
+        CollegeName: string;
+        RegistrationNumber: string;
+        Program: string;
+        Branch: string;
+        EnrollingYear: string;
+        GraduationYear: string;
+    };
+};
+
+/**
+ * Employment credential data
+ */
+export type EmploymentDetails = {
+    Language: string;
+    Locale: string;
+    Employer: {
+        CompanyName: string;
+        CompanyAddress: string;
+        EmployeeID: string;
+        LastDesignation: string;
+        StartDate: string;
+        EndDate: string;
+    };
+};
+
+/**
  * Test result credential data
  */
 export type TestResultData = {

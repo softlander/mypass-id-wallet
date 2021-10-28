@@ -7,6 +7,8 @@ import {
     AddressData,
     TestResultData,
     PersonalData,
+    HighestDegreeDetails,
+    EmploymentDetails,
     VisaApplicationData,
     BankData,
     CompanyData,
@@ -18,6 +20,8 @@ import {
 import {
     QRLink,
     PersonalInfo,
+    HighestDegreeInfo,
+    EmploymentInfo,
     ImmunityInfo,
     VisaInfo,
     InsuranceInfo,
@@ -232,6 +236,47 @@ export const preparePersonalInformation = (
     phoneNumber: contactData.UserContacts.Phone,
     email: contactData.UserContacts.Email
 });
+
+/**
+ * Prepares highest degree information
+ *
+ * @method prepareHighestDegreeInformation
+ *
+ * @param {HighestDegreeDetails} degreeData
+ *
+ * @returns {HighestDegreeInfo}
+ */
+export const prepareHighestDegreeInformation = (
+    degreeData: HighestDegreeDetails
+): HighestDegreeInfo => ({
+    collegeName: degreeData.HighestDegreeData.CollegeName,
+    registrationNumber: degreeData.HighestDegreeData.RegistrationNumber,
+    program: degreeData.HighestDegreeData.Program,
+    branch: degreeData.HighestDegreeData.Branch,
+    enrollingYear: degreeData.HighestDegreeData.EnrollingYear,
+    graduationYear: degreeData.HighestDegreeData.GraduationYear
+});
+
+/**
+ * Prepares employment information
+ *
+ * @method prepareEmploymentInformation
+ *
+ * @param {EmploymentDetails} employmentData
+ *
+ * @returns {EmploymentInfo}
+ */
+export const prepareEmploymentInformation = (
+    employmentData: EmploymentDetails
+): EmploymentInfo => ({
+    companyName: employmentData.Employer.CompanyName,
+    companyAddress: employmentData.Employer.CompanyAddress,
+    employeeID: employmentData.Employer.EmployeeID,
+    lastDesignation: employmentData.Employer.LastDesignation,
+    startDate: employmentData.Employer.StartDate,
+    endDate: employmentData.Employer.EndDate
+});
+
 
 /**
  * Prepares immunity information

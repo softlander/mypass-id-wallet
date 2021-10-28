@@ -21,15 +21,15 @@ export type QRLink = {
     challenge: string;
     requestedCredentials: string[];
     shareWith:
-        | 'healthAuthority'
-        | 'employer'
-        | 'agency'
-        | 'company'
-        | 'insurance'
-        | 'bank'
-        | 'ancestorRegistry'
-        | 'futureCommitment'
-        | 'presentCommitment';
+    | 'healthAuthority'
+    | 'employer'
+    | 'agency'
+    | 'company'
+    | 'insurance'
+    | 'bank'
+    | 'ancestorRegistry'
+    | 'futureCommitment'
+    | 'presentCommitment';
 };
 
 /**
@@ -37,6 +37,8 @@ export type QRLink = {
  */
 export type CredentialTypes =
     | 'personal'
+    | 'highestDegree'
+    | 'employment'
     | 'immunity'
     | 'visa'
     | 'company'
@@ -60,6 +62,30 @@ export type PersonalInfo = {
     passportNumber: string;
     phoneNumber: string;
     email: string;
+};
+
+/**
+ * Highest degree credential information
+ */
+export type HighestDegreeInfo = {
+    collegeName: string;
+    registrationNumber: string;
+    program: string;
+    branch: string;
+    enrollingYear: string;
+    graduationYear: string;
+};
+
+/**
+ * Employment credential information
+ */
+export type EmploymentInfo = {
+    companyName: string;
+    companyAddress: string;
+    employeeID: string;
+    lastDesignation: string;
+    startDate: string;
+    endDate: string;
 };
 
 /**
@@ -182,6 +208,16 @@ export const defaultCredentials: Credentials = {
     personal: {
         heading: 'Home Office',
         subheading: 'My Identity',
+        data: null
+    },
+    highestDegree: {
+        heading: 'Delhi University',
+        subheading: 'MS Degree Certificate',
+        data: null
+    },
+    employment: {
+        heading: 'Cool Soft Inc',
+        subheading: 'Software Developer',
         data: null
     },
     immunity: {

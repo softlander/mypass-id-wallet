@@ -1,6 +1,8 @@
 export enum SchemaNames {
     ADDRESS = 'Address',
     PERSONAL_DATA = 'PersonalData',
+    HIGHEST_DEGREE = "HighestDegree",
+    EMPLOYMENT = "Employment",
     TEST_RESULT = 'TestResult',
     VISA_APPLICATION = 'VisaApplication',
     BANK_ACCOUNT = 'BankAccount',
@@ -110,6 +112,84 @@ export const PersonalDataSchema = {
                     type: 'string'
                 },
                 PassportNumber: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+};
+
+export const HighestDegreeSchema = {
+    type: 'object',
+    required: ['DID'],
+    properties: {
+        DID: {
+            type: 'string'
+        },
+        Language: {
+            type: 'string'
+        },
+        Locale: {
+            type: 'string'
+        },
+        HighestDegree: {
+            type: 'object',
+            properties: {
+                CollegeName: {
+                    type: 'string'
+                },
+                RegistrationNumber: {
+                    type: 'string'
+                },
+                Program: {
+                    type: 'string'
+                },
+                Branch: {
+                    type: 'string'
+                },
+                EnrollingYear: {
+                    type: 'string'
+                },
+                GraduationYear: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+};
+
+export const EmploymentSchema = {
+    type: 'object',
+    required: ['DID'],
+    properties: {
+        DID: {
+            type: 'string'
+        },
+        Language: {
+            type: 'string'
+        },
+        Locale: {
+            type: 'string'
+        },
+        Employer: {
+            type: 'object',
+            properties: {
+                CompanyName: {
+                    type: 'string'
+                },
+                CompanyAddress: {
+                    type: 'string'
+                },
+                EmployeeID: {
+                    type: 'string'
+                },
+                LastDesignation: {
+                    type: 'string'
+                },
+                StartDate: {
+                    type: 'string'
+                },
+                EndDate: {
                     type: 'string'
                 }
             }
@@ -359,6 +439,8 @@ export const PresentCommitmentsSchema = {
 export const Schemas = {
     [SchemaNames.ADDRESS]: AddressSchema,
     [SchemaNames.PERSONAL_DATA]: PersonalDataSchema,
+    [SchemaNames.HIGHEST_DEGREE]: HighestDegreeSchema,
+    [SchemaNames.EMPLOYMENT]: EmploymentSchema,
     [SchemaNames.TEST_RESULT]: TestResultSchema,
     [SchemaNames.VISA_APPLICATION]: VisaApplicationSchema,
     [SchemaNames.BANK_ACCOUNT]: BankAccountSchema,
