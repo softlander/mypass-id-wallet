@@ -75,6 +75,16 @@
                 .then((identity) => {
                     return getRandomUserData().then((data) =>
                         Promise.all([
+                            createCredential(identity, SchemaNames.HIGHEST_DEGREE, {
+                                HighestDegree: {
+                                    CollegeName: "Delhi University",
+                                    RegistrationNumber: "4DU18CS024",
+                                    Program: "Bachelor of Technology",
+                                    Branch: "Computer Science",
+                                    EnrollingYear: "2018",
+                                    GraduationYear: "2022"
+                                }
+                            }),
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
@@ -116,8 +126,9 @@
                     );
                 })
                 .then((result) => {
-                    const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
+                    const [highestDegreeCredential, addressCredential, personalDataCredential, contactDetailsCredential] = result;
                     Promise.all([
+                        storeCredential(SchemaNames.HIGHEST_DEGREE, highestDegreeCredential),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
                         storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
@@ -130,10 +141,24 @@
                             )
                         };
 
+                        const highestDegreeInfo = {
+                            ...prepareHighestDegreeInformation(
+                                highestDegreeCredential.credentialSubject
+                            )
+                        };
+
                         credentials.update((existingCredentials) =>
                             Object.assign({}, existingCredentials, {
                                 personal: Object.assign({}, existingCredentials.personal, {
                                     data: personalInfo
+                                })
+                            })
+                        );
+
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                highestDegree: Object.assign({}, existingCredentials.highestDegree, {
+                                    data: highestDegreeInfo
                                 })
                             })
                         );
