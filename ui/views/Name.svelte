@@ -7,7 +7,7 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
+    import { preparePersonalInformation, prepareHighestDegreeInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
     import { credentials, dataVersion, error, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
@@ -76,7 +76,7 @@
                     return getRandomUserData().then((data) =>
                         Promise.all([
                             createCredential(identity, SchemaNames.HIGHEST_DEGREE, {
-                                HighestDegree: {
+                                HighestDegreeData: {
                                     CollegeName: "Delhi University",
                                     RegistrationNumber: "4DU18CS024",
                                     Program: "Bachelor of Technology",
@@ -133,17 +133,25 @@
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
                         storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
                     ]).then(() => {
+                        const highestDegreeInfo = {
+                            ...prepareHighestDegreeInformation(
+                                highestDegreeCredential.credentialSubject
+                            )
+                        };
+
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                highestDegree: Object.assign({}, existingCredentials.highestDegree, {
+                                    data: highestDegreeInfo
+                                })
+                            })
+                        );
+
                         const personalInfo = {
                             ...preparePersonalInformation(
                                 addressCredential.credentialSubject,
                                 personalDataCredential.credentialSubject,
                                 contactDetailsCredential.credentialSubject
-                            )
-                        };
-
-                        const highestDegreeInfo = {
-                            ...prepareHighestDegreeInformation(
-                                highestDegreeCredential.credentialSubject
                             )
                         };
 
@@ -155,14 +163,7 @@
                             })
                         );
 
-                        credentials.update((existingCredentials) =>
-                            Object.assign({}, existingCredentials, {
-                                highestDegree: Object.assign({}, existingCredentials.highestDegree, {
-                                    data: highestDegreeInfo
-                                })
-                            })
-                        );
-
+                        credentials.set
                         isCreatingCredentials = false;
                         hasSetupAccount.set(true);
                         dataVersion.set(VERSION);
