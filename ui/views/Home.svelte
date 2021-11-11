@@ -138,7 +138,9 @@
     }
 
     .credential-info {
-        width: 55%;
+        width: 100%;
+        background-color: #7d83ff;
+        border-radius: 100%;
     }
 </style>
 

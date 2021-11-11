@@ -16,6 +16,8 @@
     onMount(() => {
         switch ($activeCredentialForInfo) {
             case 'personal':
+                logo = 'government-logo';
+                break;
             case 'highestDegree':
                 logo = 'degree-logo';
                 break;
