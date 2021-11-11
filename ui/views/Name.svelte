@@ -79,10 +79,10 @@
                                 HighestDegreeData: {
                                     CollegeName: "Delhi University",
                                     RegistrationNumber: "4DU18CS024",
-                                    Program: "Bachelor of Technology",
+                                    Program: "Master of Science",
                                     Branch: "Computer Science",
                                     EnrollingYear: "2018",
-                                    GraduationYear: "2022"
+                                    GraduationYear: "2020"
                                 }
                             }),
                             createCredential(identity, SchemaNames.ADDRESS, {

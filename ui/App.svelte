@@ -93,7 +93,7 @@
 
             if (highestDegreeCredential) {
                 const highestDegreeInfo = prepareHighestDegreeInformation(
-                    degreeDataCredential.credentialSubject
+                    highestDegreeCredential.credentialSubject
                 );
 
                 credentials.update((existingCredentials) =>
