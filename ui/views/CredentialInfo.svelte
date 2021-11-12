@@ -21,6 +21,9 @@
             case 'highestDegree':
                 logo = 'degree-logo';
                 break;
+            case 'employment':
+                logo = 'employement-logo';
+                break;
             case 'company':
                 logo = 'government-logo';
                 break;
@@ -87,6 +90,10 @@
 
     .logo-highestDegree {
         background: #1b65d0;
+    }
+
+    .logo-employment {
+        background: #4db6ac;
     }
 
     .logo-visa {
@@ -220,6 +227,7 @@
     <div
         class:logo-personal="{$activeCredentialForInfo === 'personal'}"
         class:logo-highestDegree="{$activeCredentialForInfo === 'highestDegree'}"
+        class:logo-employment="{$activeCredentialForInfo === 'employment'}"
         class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
         class:logo-visa="{$activeCredentialForInfo === 'visa'}"
         class:logo-company="{$activeCredentialForInfo === 'company'}"

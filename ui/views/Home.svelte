@@ -36,6 +36,8 @@
             return 'government-logo.png'; 
         } else if (name === 'highestDegree') {
             return 'degree-logo.png';
+        } else if (name === 'employment') {
+            return 'employment-logo.png';
         } else if (name === 'immunity') {
             return 'health-authority-logo.png';
         } else if (name === 'bank' || name === 'insurance') {

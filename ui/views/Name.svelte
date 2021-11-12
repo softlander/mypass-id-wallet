@@ -7,7 +7,7 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, prepareHighestDegreeInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
+    import { preparePersonalInformation, prepareHighestDegreeInformation, prepareEmploymentInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
     import { credentials, dataVersion, error, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
@@ -85,6 +85,19 @@
                                     GraduationYear: "2020"
                                 }
                             }),
+                            createCredential(identity, SchemaNames.EMPLOYMENT, {
+                                Employer: {
+                                    CompanyName: "CoolSoft",
+                                    CompanyAddress: "Bengaluru, India",
+                                    EmployeeID: Math.random()
+                                        .toString(36)
+                                        .substring(4)
+                                        .toUpperCase(),
+                                    LastDesignation: "Software Developer",
+                                    StartDate: "2020",
+                                    EndDate: "2022"
+                                }
+                            }),
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
@@ -126,9 +139,10 @@
                     );
                 })
                 .then((result) => {
-                    const [highestDegreeCredential, addressCredential, personalDataCredential, contactDetailsCredential] = result;
+                    const [highestDegreeCredential, employemntCredential, addressCredential, personalDataCredential, contactDetailsCredential] = result;
                     Promise.all([
                         storeCredential(SchemaNames.HIGHEST_DEGREE, highestDegreeCredential),
+                        storeCredential(SchemaNames.EMPLOYMENT, employemntCredential),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
                         storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
@@ -143,6 +157,20 @@
                             Object.assign({}, existingCredentials, {
                                 highestDegree: Object.assign({}, existingCredentials.highestDegree, {
                                     data: highestDegreeInfo
+                                })
+                            })
+                        );
+
+                        const employmentInfo = {
+                            ...prepareEmploymentInformation(
+                                employemntCredential.credentialSubject
+                            )
+                        };
+
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                employment: Object.assign({}, existingCredentials.employment, {
+                                    data: employmentInfo
                                 })
                             })
                         );
