@@ -33,7 +33,11 @@
 
     function getImageSrc(name) {
         if (name === 'personal') {
-            return 'government-logo.png';
+            return 'government-logo.png'; 
+        } else if (name === 'highestDegree') {
+            return 'degree-logo.png';
+        } else if (name === 'employment') {
+            return 'employment-logo.png';
         } else if (name === 'immunity') {
             return 'health-authority-logo.png';
         } else if (name === 'bank' || name === 'insurance') {
@@ -136,7 +140,9 @@
     }
 
     .credential-info {
-        width: 55%;
+        width: 100%;
+        background-color: #7d83ff;
+        border-radius: 100%;
     }
 </style>
 

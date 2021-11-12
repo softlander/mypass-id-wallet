@@ -7,7 +7,7 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
+    import { preparePersonalInformation, prepareHighestDegreeInformation, prepareEmploymentInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
     import { credentials, dataVersion, error, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
@@ -75,6 +75,29 @@
                 .then((identity) => {
                     return getRandomUserData().then((data) =>
                         Promise.all([
+                            createCredential(identity, SchemaNames.HIGHEST_DEGREE, {
+                                HighestDegreeData: {
+                                    CollegeName: "Delhi University",
+                                    RegistrationNumber: "4DU18CS024",
+                                    Program: "Master of Science",
+                                    Branch: "Computer Science",
+                                    EnrollingYear: "2018",
+                                    GraduationYear: "2020"
+                                }
+                            }),
+                            createCredential(identity, SchemaNames.EMPLOYMENT, {
+                                Employer: {
+                                    CompanyName: "CoolSoft",
+                                    CompanyAddress: "Bengaluru, India",
+                                    EmployeeID: Math.random()
+                                        .toString(36)
+                                        .substring(4)
+                                        .toUpperCase(),
+                                    LastDesignation: "Software Developer",
+                                    StartDate: "2020",
+                                    EndDate: "2022"
+                                }
+                            }),
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
@@ -116,12 +139,42 @@
                     );
                 })
                 .then((result) => {
-                    const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
+                    const [highestDegreeCredential, employemntCredential, addressCredential, personalDataCredential, contactDetailsCredential] = result;
                     Promise.all([
+                        storeCredential(SchemaNames.HIGHEST_DEGREE, highestDegreeCredential),
+                        storeCredential(SchemaNames.EMPLOYMENT, employemntCredential),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
                         storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
                     ]).then(() => {
+                        const highestDegreeInfo = {
+                            ...prepareHighestDegreeInformation(
+                                highestDegreeCredential.credentialSubject
+                            )
+                        };
+
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                highestDegree: Object.assign({}, existingCredentials.highestDegree, {
+                                    data: highestDegreeInfo
+                                })
+                            })
+                        );
+
+                        const employmentInfo = {
+                            ...prepareEmploymentInformation(
+                                employemntCredential.credentialSubject
+                            )
+                        };
+
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                employment: Object.assign({}, existingCredentials.employment, {
+                                    data: employmentInfo
+                                })
+                            })
+                        );
+
                         const personalInfo = {
                             ...preparePersonalInformation(
                                 addressCredential.credentialSubject,
@@ -138,6 +191,7 @@
                             })
                         );
 
+                        credentials.set
                         isCreatingCredentials = false;
                         hasSetupAccount.set(true);
                         dataVersion.set(VERSION);
