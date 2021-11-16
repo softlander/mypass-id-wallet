@@ -32,6 +32,14 @@
         background: #7d83ff;
     }
 
+    .employment{
+        background: #7d83ff;
+    }
+
+    .highestDegree {
+        background: #13c4a3;
+    }
+
     .immunity {
         background: #13c4a3;
     }
@@ -93,6 +101,8 @@
     <span
         class="icon"
         class:personal="{type === 'personal'}"
+        class:highestDegree="{type === 'highestDegree'}"
+        class:employment="{type === 'employment'}"
         class:immunity="{type === 'immunity'}"
         class:visa="{type === 'visa'}"
         class:company="{type === 'company'}"

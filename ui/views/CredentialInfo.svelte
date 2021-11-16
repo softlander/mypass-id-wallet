@@ -22,7 +22,7 @@
                 logo = 'degree-logo';
                 break;
             case 'employment':
-                logo = 'employement-logo';
+                logo = 'employment-logo';
                 break;
             case 'company':
                 logo = 'government-logo';

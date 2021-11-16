@@ -29,7 +29,8 @@
         prepareVisaInformation,
         prepareFutureCommitmentInformation,
         preparePresentCommitmentInformation,
-        prepareHighestDegreeInformation
+        prepareHighestDegreeInformation,
+        prepareEmploymentInformation
     } from '~/lib/helpers';
 
     import { retrieveCredential, clearIdentity } from '~/lib/identity';
@@ -51,6 +52,7 @@
         Promise.all([
             retrieveCredential(SchemaNames.ADDRESS),
             retrieveCredential(SchemaNames.PERSONAL_DATA),
+            retrieveCredential(SchemaNames.EMPLOYMENT),
             retrieveCredential(SchemaNames.CONTACT_DETAILS),
             retrieveCredential(SchemaNames.HIGHEST_DEGREE),
             retrieveCredential(SchemaNames.TEST_RESULT),
@@ -64,6 +66,7 @@
             const [
                 addressCredential,
                 personalDataCredential,
+                employemntCredential,
                 contactDetailsCredential,
                 highestDegreeCredential,
                 testResultCredential,
@@ -100,6 +103,20 @@
                     Object.assign({}, existingCredentials, {
                         highestDegree: Object.assign({}, existingCredentials.highestDegree, {
                             data: highestDegreeInfo
+                        })
+                    })
+                );
+            }
+
+            if (employemntCredential) {
+                const employmentInfo = prepareEmploymentInformation(
+                    employemntCredential.credentialSubject
+                );
+
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        employment: Object.assign({}, existingCredentials.employment, {
+                            data: employmentInfo
                         })
                     })
                 );
