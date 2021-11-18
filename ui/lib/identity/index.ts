@@ -93,6 +93,15 @@ export type EmploymentHistoryDetails = {
 };
 
 /**
+ * Job application credential data
+ */
+export type JobApplicationData = {
+    CompanyName: string;
+    JobID: string;
+    ExpectedCTC: string;
+};
+
+/**
  * Test result credential data
  */
 export type TestResultData = {

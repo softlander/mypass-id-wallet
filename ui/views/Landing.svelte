@@ -1,50 +1,51 @@
 <script>
-    import Button from '~/components/Button';
-    import Header from '~/components/Header';
-    import { goto } from '~/lib/helpers';
-    import { landingIndex } from '~/lib/store';
+    import Button from "~/components/Button";
+    import Header from "~/components/Header";
+    import { goto } from "~/lib/helpers";
+    import { landingIndex } from "~/lib/store";
 
-    import { onMount } from 'svelte';
-    import Hammer from 'hammerjs';
+    import { onMount } from "svelte";
+    import Hammer from "hammerjs";
 
-    import { fly } from 'svelte/transition';
+    import { fly } from "svelte/transition";
 
     let mounted;
     let back = $landingIndex > 0;
 
     const info = [
         {
-            header: 'Selv stores your personal credentials',
+            header: "myPass.ID stores your personal credentials",
             content:
-                'A secure store for your personal data, only accessible to you. Selv is powered by the open, free and decentralized network IOTA.',
-            footer: 'Next'
+                "A secure store for your personal data, only accessible to you.",
+            footer: "Next"
         },
         {
-            header: 'Your data, your ownership',
-            content: 'Your data is stored locally on your device, restoring privacy to your data.',
-            footer: 'Next'
+            header: "Your data, your ownership",
+            content:
+                "Your data is stored locally on your device, restoring privacy to your data.",
+            footer: "Next"
         },
         {
-            header: 'You control access to your data',
+            header: "You control access to your data",
             content:
-                'Selv is all about controlling your personal data, not locking it up. You decide who you share your data with.',
-            footer: 'Continue'
+                "mPass.ID is all about controlling your personal data, not locking it up. You decide who you share your data with.",
+            footer: "Continue"
         }
     ];
 
     function onNext() {
         if ($landingIndex === info.length - 1) {
-            goto('onboarding/name');
+            goto("onboarding/name");
         } else {
             back = false;
-            landingIndex.update((x) => x + 1);
+            landingIndex.update(x => x + 1);
         }
     }
 
     function onBack() {
         if ($landingIndex !== 0) {
             back = true;
-            landingIndex.update((x) => x - 1);
+            landingIndex.update(x => x - 1);
         }
     }
 
@@ -64,14 +65,42 @@
 
     onMount(() => {
         mounted = true;
-        if (window.matchMedia('(pointer: coarse)').matches) {
-            const hammer = new Hammer(document.getElementById('wrapper'));
-            hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
-            hammer.on('swipeleft', () => onNext());
-            hammer.on('swiperight', () => onBack());
+        if (window.matchMedia("(pointer: coarse)").matches) {
+            const hammer = new Hammer(document.getElementById("wrapper"));
+            hammer.get("swipe").set({ direction: Hammer.DIRECTION_HORIZONTAL });
+            hammer.on("swipeleft", () => onNext());
+            hammer.on("swiperight", () => onBack());
         }
     });
 </script>
+
+<main id="wrapper">
+    <div class="headerContainer">
+        <Header text={info[$landingIndex].header} />
+    </div>
+    <div class="contentContainer">
+        {#each [$landingIndex] as count (count)}
+            <div
+                class="content"
+                in:fly={mounted ? { ...getInAnimation(), duration: 400, opacity: 0 } : false}
+                out:fly={{ ...getOutAnimation(), duration: 400, opacity: 0 }}
+            >
+                <img src={`landing-${$landingIndex + 1}.png`} alt="" />
+                <div class="dots">
+                    {#each Array(3)
+                        .fill()
+                        .map((_, i) => i) as idx}
+                        <span class:active={idx === $landingIndex} />
+                    {/each}
+                </div>
+                <p class="info">{info[$landingIndex].content}</p>
+            </div>
+        {/each}
+    </div>
+    <footer class="footerContainer">
+        <Button label={info[$landingIndex].footer} onClick={onNext} />
+    </footer>
+</main>
 
 <style>
     main {
@@ -120,7 +149,7 @@
     }
 
     .info {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 2.08vh;
@@ -150,31 +179,3 @@
         width: 100%;
     }
 </style>
-
-<main id="wrapper">
-    <div class="headerContainer">
-        <Header text="{info[$landingIndex].header}" />
-    </div>
-    <div class="contentContainer">
-        {#each [$landingIndex] as count (count)}
-            <div
-                class="content"
-                in:fly="{mounted ? { ...getInAnimation(), duration: 400, opacity: 0 } : false}"
-                out:fly="{{ ...getOutAnimation(), duration: 400, opacity: 0 }}"
-            >
-                <img src="{`landing-${$landingIndex + 1}.png`}" alt="" />
-                <div class="dots">
-                    {#each Array(3)
-                        .fill()
-                        .map((_, i) => i) as idx}
-                        <span class:active="{idx === $landingIndex}"></span>
-                    {/each}
-                </div>
-                <p class="info">{info[$landingIndex].content}</p>
-            </div>
-        {/each}
-    </div>
-    <footer class="footerContainer">
-        <Button label="{info[$landingIndex].footer}" onClick="{onNext}" />
-    </footer>
-</main>

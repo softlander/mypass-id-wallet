@@ -29,7 +29,9 @@
         prepareVisaInformation,
         prepareFutureCommitmentInformation,
         preparePresentCommitmentInformation,
-        prepareCollegeDegreeInformation
+        prepareCollegeDegreeInformation,
+        prepareEmploymentHistory,
+        prepareJobApplicationInformation
     } from "~/lib/helpers";
 
     import { retrieveCredential, clearIdentity } from "~/lib/identity";
@@ -53,6 +55,8 @@
             retrieveCredential(SchemaNames.PERSONAL_DATA),
             retrieveCredential(SchemaNames.CONTACT_DETAILS),
             retrieveCredential(SchemaNames.COLLEGE_DEGREE),
+            retrieveCredential(SchemaNames.EMPLOYMENT_HISTORY),
+            retrieveCredential(SchemaNames.JOB_APPLICATION),
             retrieveCredential(SchemaNames.TEST_RESULT),
             retrieveCredential(SchemaNames.VISA_APPLICATION),
             retrieveCredential(SchemaNames.COMPANY),
@@ -66,6 +70,8 @@
                 personalDataCredential,
                 contactDetailsCredential,
                 collegeDegreeCredential,
+                employmentHistoryCredential,
+                jobApplicationCredential,
                 testResultCredential,
                 visaApplicationCredential,
                 companyCredential,
@@ -98,25 +104,51 @@
                     })
                 );
             }
-
             if (collegeDegreeCredential) {
-                const collegeDegreeInfo = prepareCollegeDegreeInformation(
-                    collegeDegreeCredential.credentialSubject
-                );
-
                 credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
                         collegeDegree: Object.assign(
                             {},
                             existingCredentials.collegeDegree,
                             {
-                                data: collegeDegreeInfo
+                                data: prepareCollegeDegreeInformation(
+                                    collegeDegreeCredential.credentialSubject
+                                )
                             }
                         )
                     })
                 );
             }
-
+            if (employmentHistoryCredential) {
+                credentials.update(existingCredentials =>
+                    Object.assign({}, existingCredentials, {
+                        employmentHistory: Object.assign(
+                            {},
+                            existingCredentials.employmentHistory,
+                            {
+                                data: prepareEmploymentHistory(
+                                    employmentHistoryCredential.credentialSubject
+                                )
+                            }
+                        )
+                    })
+                );
+            }
+            if (jobApplicationCredential) {
+                credentials.update(existingCredentials =>
+                    Object.assign({}, existingCredentials, {
+                        jobApplication: Object.assign(
+                            {},
+                            existingCredentials.jobApplication,
+                            {
+                                data: prepareJobApplicationInformation(
+                                    jobApplicationCredential.credentialSubject
+                                )
+                            }
+                        )
+                    })
+                );
+            }
             if (testResultCredential) {
                 credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
@@ -132,7 +164,6 @@
                     })
                 );
             }
-
             if (visaApplicationCredential) {
                 credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
@@ -144,7 +175,6 @@
                     })
                 );
             }
-
             if (companyCredential) {
                 credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {

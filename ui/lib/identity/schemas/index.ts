@@ -3,6 +3,7 @@ export enum SchemaNames {
     PERSONAL_DATA = 'PersonalData',
     COLLEGE_DEGREE = "CollegeDegree",
     EMPLOYMENT_HISTORY = "EmploymentHistory",
+    JOB_APPLICATION = 'JobApplication',
     TEST_RESULT = 'TestResult',
     VISA_APPLICATION = 'VisaApplication',
     BANK_ACCOUNT = 'BankAccount',
@@ -190,6 +191,36 @@ export const EmploymentHistorySchema = {
                     type: 'string'
                 },
                 EndDate: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+};
+
+export const JobApplicationSchema = {
+    type: 'object',
+    required: ['DID'],
+    properties: {
+        DID: {
+            type: 'string'
+        },
+        Language: {
+            type: 'string'
+        },
+        Locale: {
+            type: 'string'
+        },
+        Application: {
+            type: 'object',
+            properties: {
+                CompanyName: {
+                    type: 'string'
+                },
+                JobID: {
+                    type: 'string'
+                },
+                ExpectedCTC: {
                     type: 'string'
                 }
             }
@@ -440,6 +471,7 @@ export const Schemas = {
     [SchemaNames.ADDRESS]: AddressSchema,
     [SchemaNames.PERSONAL_DATA]: PersonalDataSchema,
     [SchemaNames.COLLEGE_DEGREE]: CollegeDegreeSchema,
+    [SchemaNames.JOB_APPLICATION]: JobApplicationSchema,
     [SchemaNames.EMPLOYMENT_HISTORY]: EmploymentHistorySchema,
     [SchemaNames.TEST_RESULT]: TestResultSchema,
     [SchemaNames.VISA_APPLICATION]: VisaApplicationSchema,

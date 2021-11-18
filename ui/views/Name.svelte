@@ -9,8 +9,6 @@
 
     import {
         preparePersonalInformation,
-        prepareCollegeDegreeInformation,
-        prepareEmploymentHistory,
         getRandomUserData,
         goto,
         delay
@@ -105,37 +103,6 @@
                 .then(identity => {
                     return getRandomUserData().then(data =>
                         Promise.all([
-                            createCredential(
-                                identity,
-                                SchemaNames.COLLEGE_DEGREE,
-                                {
-                                    CollegeDegreeData: {
-                                        CollegeName: "Delhi University",
-                                        RegistrationNumber: "4DU18CS024",
-                                        Program: "Master of Science",
-                                        Branch: "Computer Science",
-                                        EnrollingYear: "2018",
-                                        GraduationYear: "2020"
-                                    }
-                                }
-                            ),
-                            createCredential(
-                                identity,
-                                SchemaNames.EMPLOYMENT_HISTORY,
-                                {
-                                    Employer: {
-                                        CompanyName: "CoolSoft",
-                                        CompanyAddress: "Bengaluru, India",
-                                        EmployeeID: Math.random()
-                                            .toString(36)
-                                            .substring(4)
-                                            .toUpperCase(),
-                                        LastDesignation: "Software Developer",
-                                        StartDate: "2020",
-                                        EndDate: "2022"
-                                    }
-                                }
-                            ),
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
@@ -188,21 +155,11 @@
                 })
                 .then(result => {
                     const [
-                        collegeDegreeCredential,
-                        employmentHistoryCredential,
                         addressCredential,
                         personalDataCredential,
                         contactDetailsCredential
                     ] = result;
                     Promise.all([
-                        storeCredential(
-                            SchemaNames.COLLEGE_DEGREE,
-                            collegeDegreeCredential
-                        ),
-                        storeCredential(
-                            SchemaNames.EMPLOYMENT_HISTORY,
-                            employmentHistoryCredential
-                        ),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(
                             SchemaNames.PERSONAL_DATA,
@@ -213,42 +170,6 @@
                             contactDetailsCredential
                         )
                     ]).then(() => {
-                        const collegeDegreeInfo = {
-                            ...prepareCollegeDegreeInformation(
-                                collegeDegreeCredential.credentialSubject
-                            )
-                        };
-
-                        credentials.update(existingCredentials =>
-                            Object.assign({}, existingCredentials, {
-                                collegeDegree: Object.assign(
-                                    {},
-                                    existingCredentials.collegeDegree,
-                                    {
-                                        data: collegeDegreeInfo
-                                    }
-                                )
-                            })
-                        );
-
-                        const employmentInfo = {
-                            ...prepareEmploymentHistory(
-                                employmentHistoryCredential.credentialSubject
-                            )
-                        };
-
-                        credentials.update(existingCredentials =>
-                            Object.assign({}, existingCredentials, {
-                                employment: Object.assign(
-                                    {},
-                                    existingCredentials.employment,
-                                    {
-                                        data: employmentInfo
-                                    }
-                                )
-                            })
-                        );
-
                         const personalInfo = {
                             ...preparePersonalInformation(
                                 addressCredential.credentialSubject,
@@ -301,7 +222,7 @@
         </div>
 
         <p class="info">
-            Selv will generate you an identity using randomised personal
+            myPass.ID will generate you an identity using randomised personal
             information.
         </p>
 

@@ -89,6 +89,15 @@ export type EmploymentHistoryInfo = {
 };
 
 /**
+ * Job application credential information
+ */
+export type JobApplicationInfo = {
+    companyName: string;
+    jobID: string;
+    expectedCTC: string;
+};
+
+/**
  * Immunity credential information
  */
 export type ImmunityInfo = {

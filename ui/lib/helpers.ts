@@ -9,6 +9,7 @@ import {
     PersonalData,
     CollegeDegreeDetails,
     EmploymentHistoryDetails,
+    JobApplicationData,
     VisaApplicationData,
     BankData,
     CompanyData,
@@ -22,6 +23,7 @@ import {
     PersonalInfo,
     CollegeDegreeInfo,
     EmploymentHistoryInfo,
+    JobApplicationInfo,
     ImmunityInfo,
     VisaInfo,
     InsuranceInfo,
@@ -238,7 +240,7 @@ export const preparePersonalInformation = (
 });
 
 /**
- * Prepares highest degree information
+ * Prepares college degree information
  *
  * @method prepareCollegeDegreeInformation
  *
@@ -258,7 +260,7 @@ export const prepareCollegeDegreeInformation = (
 });
 
 /**
- * Prepares employment information
+ * Prepares employment history information
  *
  * @method prepareEmploymentHistory
  *
@@ -275,6 +277,21 @@ export const prepareEmploymentHistory = (
     lastDesignation: employmentData.Employer.LastDesignation,
     startDate: employmentData.Employer.StartDate,
     endDate: employmentData.Employer.EndDate
+});
+
+/**
+ * Prepares job application information
+ *
+ * @method prepareJobApplicationInformation
+ *
+ * @param {JobApplicationData} jobApplicationData
+ *
+ * @returns {JobApplicationInfo}
+ */
+export const prepareJobApplicationInformation = (jobApplicationData: JobApplicationData): JobApplicationInfo => ({
+    companyName: jobApplicationData.CompanyName,
+    jobID: jobApplicationData.JobID,
+    expectedCTC: jobApplicationData.ExpectedCTC
 });
 
 

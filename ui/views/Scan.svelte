@@ -1,32 +1,51 @@
 <script>
-    import Scanner from '~/components/Scanner';
+    import Scanner from "~/components/Scanner";
 
-    import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState, modalStatus, error } from '~/lib/store';
-    import { __IOS__ } from '~/lib/platform';
+    import { goto, parseLink } from "~/lib/helpers";
+    import { socketConnectionState, modalStatus, error } from "~/lib/store";
+    import { __IOS__ } from "~/lib/platform";
 
-    const handleScannerData = (event) => {
+    const handleScannerData = event => {
         const parsedLink = parseLink(event.detail);
         if (parsedLink) {
             goBack();
-            socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
+            socketConnectionState.set({
+                state: "registerMobileClient",
+                payload: parsedLink
+            });
+            return setTimeout(
+                () =>
+                    modalStatus.set({
+                        active: true,
+                        type: "share",
+                        props: parsedLink
+                    }),
+                300
+            );
         }
         goBack();
-        if (event.detail.includes('qr-redirect')) {
-            return error.set('You already have the Selv app downloaded');
+        if (event.detail.includes("qr-redirect")) {
+            return error.set("You already have the myPAss.ID app downloaded");
         }
-        error.set('Invalid QR Code');
-    }
+        error.set("Invalid QR Code");
+    };
 
-    window.scan = (param) => {
-        handleScannerData({detail: JSON.stringify(param)})
+    window.scan = param => {
+        handleScannerData({ detail: JSON.stringify(param) });
     };
 
     function goBack() {
-        goto('home');
+        goto("home");
     }
 </script>
+
+<main>
+    <header class:ios={__IOS__}>
+        <img on:click={goBack} src="chevron-left.svg" alt="" />
+        <p>QR Scanner</p>
+    </header>
+    <Scanner on:message={handleScannerData} />
+</main>
 
 <style>
     main {
@@ -58,7 +77,7 @@
         text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 5vw;
@@ -67,11 +86,3 @@
         color: #ffffff;
     }
 </style>
-
-<main>
-    <header class:ios="{__IOS__}">
-        <img on:click="{goBack}" src="chevron-left.svg" alt="" />
-        <p>QR Scanner</p>
-    </header>
-    <Scanner on:message="{handleScannerData}" />
-</main>
