@@ -30,8 +30,8 @@
             case "employmentHistory":
                 logo = "employment-logo";
                 break;
-            case "jobApplication":
-                logo = "job-application-logo";
+            case "jobOffer":
+                logo = "job-offer-logo";
                 break;
             case "company":
                 logo = "government-logo";
@@ -68,7 +68,7 @@
         class:logo-personal={$activeCredentialForInfo === 'personal'}
         class:logo-collegeDegree={$activeCredentialForInfo === 'collegeDegree'}
         class:logo-employment={$activeCredentialForInfo === 'employmentHistory'}
-        class:logo-jobApplication={$activeCredentialForInfo === 'jobApplication'}
+        class:logo-jobOffer={$activeCredentialForInfo === 'jobOffer'}
         class:logo-immunity={$activeCredentialForInfo === 'immunity'}
         class:logo-visa={$activeCredentialForInfo === 'visa'}
         class:logo-company={$activeCredentialForInfo === 'company'}
@@ -175,7 +175,7 @@
         background: #4db6ac;
     }
 
-    .logo-jobApplication {
+    .logo-jobOffer {
         background: #4db6ac;
     }
 

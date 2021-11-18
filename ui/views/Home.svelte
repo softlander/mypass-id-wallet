@@ -44,8 +44,8 @@
             return "degree-logo.png";
         } else if (name === "employmentHistory") {
             return "employment-logo.png";
-        } else if (name === "jobApplication") {
-            return "job-application-logo.png";
+        } else if (name === "jobOffer") {
+            return "job-offer-logo.png";
         } else if (name === "immunity") {
             return "health-authority-logo.png";
         } else if (name === "bank" || name === "insurance") {

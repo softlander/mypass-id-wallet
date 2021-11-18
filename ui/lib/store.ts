@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { persistent } from '~/lib/helpers';
 
 /**
- * Determines if use has completed onboarding
+ * Determines if user has completed onboarding
  */
 export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
@@ -21,8 +21,10 @@ export type QRLink = {
     challenge: string;
     requestedCredentials: string[];
     shareWith:
+    | 'university'
+    | 'previousEmployer'
+    | 'newEmployer'
     | 'healthAuthority'
-    | 'employer'
     | 'agency'
     | 'company'
     | 'insurance'
@@ -38,7 +40,8 @@ export type QRLink = {
 export type CredentialTypes =
     | 'personal'
     | 'collegeDegree'
-    | 'employment'
+    | 'employmentHistory'
+    | 'jobOffer'
     | 'immunity'
     | 'visa'
     | 'company'
@@ -89,12 +92,14 @@ export type EmploymentHistoryInfo = {
 };
 
 /**
- * Job application credential information
+ * Job offer credential information
  */
-export type JobApplicationInfo = {
+export type JobOfferInfo = {
     companyName: string;
-    jobID: string;
-    expectedCTC: string;
+    companyAddress: string;
+    designation: string;
+    startDate: string;
+    ctc: string;
 };
 
 /**
@@ -220,13 +225,18 @@ export const defaultCredentials: Credentials = {
         data: null
     },
     collegeDegree: {
-        heading: 'Delhi University',
-        subheading: 'MS Degree Certificate',
+        heading: 'Education',
+        subheading: 'College Degree Certificate',
         data: null
     },
-    employment: {
-        heading: 'Cool Soft Inc',
-        subheading: 'Software Developer',
+    employmentHistory: {
+        heading: 'Employment',
+        subheading: 'Job Experience Certificate',
+        data: null
+    },
+    jobOffer: {
+        heading: 'Job Offer',
+        subheading: 'Offer Details',
         data: null
     },
     immunity: {

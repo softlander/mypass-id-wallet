@@ -31,7 +31,7 @@
         preparePresentCommitmentInformation,
         prepareCollegeDegreeInformation,
         prepareEmploymentHistory,
-        prepareJobApplicationInformation
+        prepareJobOfferInformation
     } from "~/lib/helpers";
 
     import { retrieveCredential, clearIdentity } from "~/lib/identity";
@@ -56,7 +56,7 @@
             retrieveCredential(SchemaNames.CONTACT_DETAILS),
             retrieveCredential(SchemaNames.COLLEGE_DEGREE),
             retrieveCredential(SchemaNames.EMPLOYMENT_HISTORY),
-            retrieveCredential(SchemaNames.JOB_APPLICATION),
+            retrieveCredential(SchemaNames.JOB_OFFER),
             retrieveCredential(SchemaNames.TEST_RESULT),
             retrieveCredential(SchemaNames.VISA_APPLICATION),
             retrieveCredential(SchemaNames.COMPANY),
@@ -71,7 +71,7 @@
                 contactDetailsCredential,
                 collegeDegreeCredential,
                 employmentHistoryCredential,
-                jobApplicationCredential,
+                jobOfferCredential,
                 testResultCredential,
                 visaApplicationCredential,
                 companyCredential,
@@ -134,15 +134,15 @@
                     })
                 );
             }
-            if (jobApplicationCredential) {
+            if (jobOfferCredential) {
                 credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        jobApplication: Object.assign(
+                        jobOffer: Object.assign(
                             {},
-                            existingCredentials.jobApplication,
+                            existingCredentials.jobOffer,
                             {
-                                data: prepareJobApplicationInformation(
-                                    jobApplicationCredential.credentialSubject
+                                data: prepareJobOfferInformation(
+                                    jobOfferCredential.credentialSubject
                                 )
                             }
                         )

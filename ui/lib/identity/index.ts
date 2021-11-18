@@ -95,10 +95,12 @@ export type EmploymentHistoryDetails = {
 /**
  * Job application credential data
  */
-export type JobApplicationData = {
+export type JobOfferData = {
     CompanyName: string;
-    JobID: string;
-    ExpectedCTC: string;
+    CompanyAddress: string;
+    Designation: string;
+    StartDate: string;
+    CTC: string;
 };
 
 /**
