@@ -37,7 +37,7 @@ export type QRLink = {
  */
 export type CredentialTypes =
     | 'personal'
-    | 'highestDegree'
+    | 'collegeDegree'
     | 'employment'
     | 'immunity'
     | 'visa'
@@ -67,7 +67,7 @@ export type PersonalInfo = {
 /**
  * Highest degree credential information
  */
-export type HighestDegreeInfo = {
+export type CollegeDegreeInfo = {
     collegeName: string;
     registrationNumber: string;
     program: string;
@@ -210,7 +210,7 @@ export const defaultCredentials: Credentials = {
         subheading: 'My Identity',
         data: null
     },
-    highestDegree: {
+    collegeDegree: {
         heading: 'Delhi University',
         subheading: 'MS Degree Certificate',
         data: null

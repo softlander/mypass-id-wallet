@@ -1,58 +1,107 @@
 <script>
-    import Button from '~/components/Button';
-    import ListItem from '~/components/ListItem';
-    import { onDestroy } from 'svelte';
+    import Button from "~/components/Button";
+    import ListItem from "~/components/ListItem";
+    import { onDestroy } from "svelte";
 
-    import { goto } from '~/lib/helpers';
-    import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
+    import { goto } from "~/lib/helpers";
+    import {
+        activeCredentialForInfo,
+        credentials,
+        modalStatus
+    } from "~/lib/store";
 
     let credentialNames = setCredentialNames($credentials);
 
-    const unsubscribe = credentials.subscribe((newCredentials) => {
+    const unsubscribe = credentials.subscribe(newCredentials => {
         credentialNames = setCredentialNames(newCredentials);
     });
 
     function setCredentialNames(_credentials) {
-        return Object.keys(_credentials).filter((credentialName) => _credentials[credentialName].data);
+        return Object.keys(_credentials).filter(
+            credentialName => _credentials[credentialName].data
+        );
     }
 
     function scan() {
-        goto('modal/scan');
+        goto("modal/scan");
     }
 
     function settings() {
-        goto('modal/settings');
+        goto("modal/settings");
     }
 
     function redirect(credentialName) {
         activeCredentialForInfo.set(credentialName);
-        goto('menu/credential-info');
+        goto("menu/credential-info");
     }
 
     onDestroy(unsubscribe);
 
     function getImageSrc(name) {
-        if (name === 'personal') {
-            return 'government-logo.png'; 
-        } else if (name === 'highestDegree') {
-            return 'degree-logo.png';
-        } else if (name === 'employment') {
-            return 'employment-logo.png';
-        } else if (name === 'immunity') {
-            return 'health-authority-logo.png';
-        } else if (name === 'bank' || name === 'insurance') {
-            return 'sns.png';
-        } else if (name === 'company') {
-            return 'government-logo.png';
-        } else if (name === 'futureCommitment') {
-            return 'future_foundation.png';
-        } else if (name === 'presentCommitment') {
-            return 'present_foundation.png';
+        if (name === "personal") {
+            return "government-logo.png";
+        } else if (name === "collegeDegree") {
+            return "degree-logo.png";
+        } else if (name === "employment") {
+            return "employment-logo.png";
+        } else if (name === "immunity") {
+            return "health-authority-logo.png";
+        } else if (name === "bank" || name === "insurance") {
+            return "sns.png";
+        } else if (name === "company") {
+            return "government-logo.png";
+        } else if (name === "futureCommitment") {
+            return "future_foundation.png";
+        } else if (name === "presentCommitment") {
+            return "present_foundation.png";
         }
 
-        return 'border-agency-logo.png';
+        return "border-agency-logo.png";
     }
 </script>
+
+<main>
+    <div class="settings">
+        <button class="settings-button" on:click={settings}>
+            <img src="settings.svg" alt="" />
+        </button>
+    </div>
+    <div class="logo">
+        <img src="person.png" alt="" />
+    </div>
+
+    <header>
+        <p>
+            {$credentials.personal.data.firstName}
+            {$credentials.personal.data.lastName}
+        </p>
+    </header>
+    <section>
+        {#each credentialNames as name}
+            <div class="list">
+                <ListItem
+                    type={name}
+                    onClick={() => redirect(name)}
+                    heading={$credentials[name].heading}
+                    subheading={$credentials[name].subheading}
+                >
+                    <img
+                        class="credential-info"
+                        src={getImageSrc(name)}
+                        alt=""
+                    />
+                </ListItem>
+            </div>
+        {/each}
+
+    </section>
+
+    <footer>
+        <Button label="Scan Code" onClick={scan}>
+            <img src="scan.png" alt="" />
+        </Button>
+    </footer>
+</main>
 
 <style>
     main {
@@ -61,8 +110,10 @@
         justify-content: space-between;
         height: 100%;
         padding: 6vh 7vw;
-        background: url('/circle.png') no-repeat bottom left/60%, url('/rectangle.png') repeat-x top/95%,
-            url('/bg-circle-1.png') no-repeat 90% 25%/7%, url('/bg-circle-2.png') no-repeat 16% 26%/3%;
+        background: url("/circle.png") no-repeat bottom left/60%,
+            url("/rectangle.png") repeat-x top/95%,
+            url("/bg-circle-1.png") no-repeat 90% 25%/7%,
+            url("/bg-circle-2.png") no-repeat 16% 26%/3%;
         background-color: var(--bg);
     }
 
@@ -114,7 +165,7 @@
     }
 
     header > p {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: bold;
         font-size: 6vw;
         line-height: 8vw;
@@ -145,37 +196,3 @@
         border-radius: 100%;
     }
 </style>
-
-<main>
-    <div class="settings">
-        <button class="settings-button" on:click="{settings}"><img src="settings.svg" alt="" /></button>
-    </div>
-    <div class="logo">
-        <img src="person.png" alt="" />
-    </div>
-
-    <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
-    </header>
-    <section>
-        {#each credentialNames as name}
-            <div class="list">
-                <ListItem
-                    type="{name}"
-                    onClick="{() => redirect(name)}"
-                    heading="{$credentials[name].heading}"
-                    subheading="{$credentials[name].subheading}"
-                >
-                    <img class="credential-info" src="{getImageSrc(name)}" alt="" />
-                </ListItem>
-            </div>
-        {/each}
-
-    </section>
-
-    <footer>
-        <Button label="Scan Code" onClick="{scan}">
-            <img src="scan.png" alt="" />
-        </Button>
-    </footer>
-</main>

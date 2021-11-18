@@ -7,7 +7,7 @@ import {
     AddressData,
     TestResultData,
     PersonalData,
-    HighestDegreeDetails,
+    CollegeDegreeDetails,
     EmploymentDetails,
     VisaApplicationData,
     BankData,
@@ -20,7 +20,7 @@ import {
 import {
     QRLink,
     PersonalInfo,
-    HighestDegreeInfo,
+    CollegeDegreeInfo,
     EmploymentInfo,
     ImmunityInfo,
     VisaInfo,
@@ -240,21 +240,21 @@ export const preparePersonalInformation = (
 /**
  * Prepares highest degree information
  *
- * @method prepareHighestDegreeInformation
+ * @method prepareCollegeDegreeInformation
  *
- * @param {HighestDegreeDetails} degreeData
+ * @param {CollegeDegreeDetails} degreeData
  *
- * @returns {HighestDegreeInfo}
+ * @returns {CollegeDegreeInfo}
  */
-export const prepareHighestDegreeInformation = (
-    degreeData: HighestDegreeDetails
-): HighestDegreeInfo => ({
-    collegeName: degreeData.HighestDegreeData.CollegeName,
-    registrationNumber: degreeData.HighestDegreeData.RegistrationNumber,
-    program: degreeData.HighestDegreeData.Program,
-    branch: degreeData.HighestDegreeData.Branch,
-    enrollingYear: degreeData.HighestDegreeData.EnrollingYear,
-    graduationYear: degreeData.HighestDegreeData.GraduationYear
+export const prepareCollegeDegreeInformation = (
+    degreeData: CollegeDegreeDetails
+): CollegeDegreeInfo => ({
+    collegeName: degreeData.CollegeDegreeData.CollegeName,
+    registrationNumber: degreeData.CollegeDegreeData.RegistrationNumber,
+    program: degreeData.CollegeDegreeData.Program,
+    branch: degreeData.CollegeDegreeData.Branch,
+    enrollingYear: degreeData.CollegeDegreeData.EnrollingYear,
+    graduationYear: degreeData.CollegeDegreeData.GraduationYear
 });
 
 /**

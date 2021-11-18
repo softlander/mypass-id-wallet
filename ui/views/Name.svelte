@@ -1,22 +1,40 @@
 <script>
-    import { Plugins, KeyboardInfo } from '@capacitor/core';
-    import { onDestroy } from 'svelte';
-    import { flip } from 'svelte/animate';
+    import { Plugins, KeyboardInfo } from "@capacitor/core";
+    import { onDestroy } from "svelte";
+    import { flip } from "svelte/animate";
 
-    import Button from '~/components/Button';
-    import TextField from '~/components/TextField';
-    import Header from '~/components/Header';
+    import Button from "~/components/Button";
+    import TextField from "~/components/TextField";
+    import Header from "~/components/Header";
 
-    import { preparePersonalInformation, prepareHighestDegreeInformation, prepareEmploymentInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
-    import { credentials, dataVersion, error, hasSetupAccount } from '~/lib/store';
-    import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
-    import { SchemaNames } from '~/lib/identity/schemas';
-    import { __WEB__ } from '~/lib/platform';
-    import { VERSION } from '~/lib/config';
+    import {
+        preparePersonalInformation,
+        prepareCollegeDegreeInformation,
+        prepareEmploymentInformation,
+        getRandomUserData,
+        goto,
+        delay
+    } from "~/lib/helpers";
+    import {
+        credentials,
+        dataVersion,
+        error,
+        hasSetupAccount
+    } from "~/lib/store";
+    import {
+        createIdentity,
+        storeIdentity,
+        retrieveIdentity,
+        createCredential,
+        storeCredential
+    } from "~/lib/identity";
+    import { SchemaNames } from "~/lib/identity/schemas";
+    import { __WEB__ } from "~/lib/platform";
+    import { VERSION } from "~/lib/config";
 
     const { Keyboard } = Plugins;
     let isCreatingCredentials = false;
-    let firstName = '';
+    let firstName = "";
     let isKeyboardActive = false;
 
     let background;
@@ -25,12 +43,12 @@
     const isRunningOnMobile = !__WEB__;
 
     if (isRunningOnMobile) {
-        Keyboard.addListener('keyboardWillShow', (info) => {
+        Keyboard.addListener("keyboardWillShow", info => {
             keyboardHeight = info.keyboardHeight;
             isKeyboardActive = true;
         });
 
-        Keyboard.addListener('keyboardWillHide', () => {
+        Keyboard.addListener("keyboardWillHide", () => {
             isKeyboardActive = false;
         });
     }
@@ -60,31 +78,47 @@
             error.set(null);
 
             retrieveIdentity()
-                .then((identity) =>
+                .then(identity =>
                     identity
                         ? Promise.resolve(identity)
                         : Promise.race([
-                              createIdentity().catch((e) => {
-                                    console.error(e);
-                                }),
+                              createIdentity().catch(e => {
+                                  console.error(e);
+                              }),
                               new Promise((resolve, reject) => {
-                                  setTimeout(() => reject(new Error('Error creating identity')), 30000);
+                                  setTimeout(
+                                      () =>
+                                          reject(
+                                              new Error(
+                                                  "Error creating identity"
+                                              )
+                                          ),
+                                      30000
+                                  );
                               })
-                          ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
+                          ]).then(newIdentity =>
+                              storeIdentity("did", newIdentity).then(
+                                  () => newIdentity
+                              )
+                          )
                 )
-                .then((identity) => {
-                    return getRandomUserData().then((data) =>
+                .then(identity => {
+                    return getRandomUserData().then(data =>
                         Promise.all([
-                            createCredential(identity, SchemaNames.HIGHEST_DEGREE, {
-                                HighestDegreeData: {
-                                    CollegeName: "Delhi University",
-                                    RegistrationNumber: "4DU18CS024",
-                                    Program: "Master of Science",
-                                    Branch: "Computer Science",
-                                    EnrollingYear: "2018",
-                                    GraduationYear: "2020"
+                            createCredential(
+                                identity,
+                                SchemaNames.COLLEGE_DEGREE,
+                                {
+                                    CollegeDegreeData: {
+                                        CollegeName: "Delhi University",
+                                        RegistrationNumber: "4DU18CS024",
+                                        Program: "Master of Science",
+                                        Branch: "Computer Science",
+                                        EnrollingYear: "2018",
+                                        GraduationYear: "2020"
+                                    }
                                 }
-                            }),
+                            ),
                             createCredential(identity, SchemaNames.EMPLOYMENT, {
                                 Employer: {
                                     CompanyName: "CoolSoft",
@@ -108,56 +142,88 @@
                                     House: data.location.street.name
                                 }
                             }),
-                            createCredential(identity, SchemaNames.PERSONAL_DATA, {
-                                UserPersonalData: {
-                                    UserName: {
-                                        FirstName: firstName,
-                                        LastName: data.name.last
-                                    },
-                                    UserDOB: {
-                                        Date: new Date(data.dob.date).toDateString()
-                                    },
-                                    Birthplace: data.location.city,
-                                    Nationality: data.location.country,
-                                    IdentityCardNumber: Math.random()
-                                        .toString(36)
-                                        .substring(4)
-                                        .toUpperCase(),
-                                    PassportNumber: Math.random()
-                                        .toString(36)
-                                        .substring(7)
-                                        .toUpperCase()
+                            createCredential(
+                                identity,
+                                SchemaNames.PERSONAL_DATA,
+                                {
+                                    UserPersonalData: {
+                                        UserName: {
+                                            FirstName: firstName,
+                                            LastName: data.name.last
+                                        },
+                                        UserDOB: {
+                                            Date: new Date(
+                                                data.dob.date
+                                            ).toDateString()
+                                        },
+                                        Birthplace: data.location.city,
+                                        Nationality: data.location.country,
+                                        IdentityCardNumber: Math.random()
+                                            .toString(36)
+                                            .substring(4)
+                                            .toUpperCase(),
+                                        PassportNumber: Math.random()
+                                            .toString(36)
+                                            .substring(7)
+                                            .toUpperCase()
+                                    }
                                 }
-                            }),
-                            createCredential(identity, SchemaNames.CONTACT_DETAILS, {
-                                UserContacts: {
-                                    Email: data.email,
-                                    Phone: data.phone
+                            ),
+                            createCredential(
+                                identity,
+                                SchemaNames.CONTACT_DETAILS,
+                                {
+                                    UserContacts: {
+                                        Email: data.email,
+                                        Phone: data.phone
+                                    }
                                 }
-                            })
+                            )
                         ])
                     );
                 })
-                .then((result) => {
-                    const [highestDegreeCredential, employemntCredential, addressCredential, personalDataCredential, contactDetailsCredential] = result;
+                .then(result => {
+                    const [
+                        collegeDegreeCredential,
+                        employemntCredential,
+                        addressCredential,
+                        personalDataCredential,
+                        contactDetailsCredential
+                    ] = result;
                     Promise.all([
-                        storeCredential(SchemaNames.HIGHEST_DEGREE, highestDegreeCredential),
-                        storeCredential(SchemaNames.EMPLOYMENT, employemntCredential),
+                        storeCredential(
+                            SchemaNames.COLLEGE_DEGREE,
+                            collegeDegreeCredential
+                        ),
+                        storeCredential(
+                            SchemaNames.EMPLOYMENT,
+                            employemntCredential
+                        ),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
-                        storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
-                        storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
+                        storeCredential(
+                            SchemaNames.PERSONAL_DATA,
+                            personalDataCredential
+                        ),
+                        storeCredential(
+                            SchemaNames.CONTACT_DETAILS,
+                            contactDetailsCredential
+                        )
                     ]).then(() => {
-                        const highestDegreeInfo = {
-                            ...prepareHighestDegreeInformation(
-                                highestDegreeCredential.credentialSubject
+                        const collegeDegreeInfo = {
+                            ...prepareCollegeDegreeInformation(
+                                collegeDegreeCredential.credentialSubject
                             )
                         };
 
-                        credentials.update((existingCredentials) =>
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                highestDegree: Object.assign({}, existingCredentials.highestDegree, {
-                                    data: highestDegreeInfo
-                                })
+                                collegeDegree: Object.assign(
+                                    {},
+                                    existingCredentials.collegeDegree,
+                                    {
+                                        data: collegeDegreeInfo
+                                    }
+                                )
                             })
                         );
 
@@ -167,11 +233,15 @@
                             )
                         };
 
-                        credentials.update((existingCredentials) =>
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                employment: Object.assign({}, existingCredentials.employment, {
-                                    data: employmentInfo
-                                })
+                                employment: Object.assign(
+                                    {},
+                                    existingCredentials.employment,
+                                    {
+                                        data: employmentInfo
+                                    }
+                                )
                             })
                         );
 
@@ -183,30 +253,71 @@
                             )
                         };
 
-                        credentials.update((existingCredentials) =>
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                personal: Object.assign({}, existingCredentials.personal, {
-                                    data: personalInfo
-                                })
+                                personal: Object.assign(
+                                    {},
+                                    existingCredentials.personal,
+                                    {
+                                        data: personalInfo
+                                    }
+                                )
                             })
                         );
 
-                        credentials.set
+                        credentials.set;
                         isCreatingCredentials = false;
                         hasSetupAccount.set(true);
                         dataVersion.set(VERSION);
-                        goto('onboarding/home');
+                        goto("onboarding/home");
                     });
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err);
-                    error.set('Error creating identity. Please try again.');
+                    error.set("Error creating identity. Please try again.");
 
                     isCreatingCredentials = false;
                 });
         }, 500);
     }
 </script>
+
+{#each [true] as item, index (item)}
+    <main
+        bind:this={background}
+        on:click={handleOuterClick}
+        style="top: {isKeyboardActive ? `-${keyboardHeight}px` : '0'}"
+        animate:flip={{ duration: 350 }}
+    >
+
+        <Header text="Set your first name" />
+
+        <div class="content">
+            <img src="set-name.png" alt="" />
+        </div>
+
+        <p class="info">
+            Selv will generate you an identity using randomised personal
+            information.
+        </p>
+
+        <TextField
+            disabled={isCreatingCredentials}
+            bind:value={firstName}
+            placeholder="First name"
+        />
+
+        <footer>
+            <Button
+                loading={isCreatingCredentials}
+                loadingText={'Generating identity'}
+                disabled={firstName.length === 0}
+                label="Save Name"
+                onClick={save}
+            />
+        </footer>
+    </main>
+{/each}
 
 <style>
     main {
@@ -240,7 +351,7 @@
     }
 
     .info {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 2.08vh;
@@ -251,33 +362,3 @@
         width: 100%;
     }
 </style>
-
-{#each [true] as item, index (item)}
-    <main
-        bind:this="{background}"
-        on:click="{handleOuterClick}"
-        style="top: {isKeyboardActive ? `-${keyboardHeight}px` : '0'}"
-        animate:flip="{{ duration: 350 }}"
-    >
-
-        <Header text="Set your first name" />
-
-        <div class="content">
-            <img src="set-name.png" alt="" />
-        </div>
-
-        <p class="info">Selv will generate you an identity using randomised personal information.</p>
-
-        <TextField disabled="{isCreatingCredentials}" bind:value="{firstName}" placeholder="First name" />
-
-        <footer>
-            <Button
-                loading="{isCreatingCredentials}"
-                loadingText="{'Generating identity'}"
-                disabled="{firstName.length === 0}"
-                label="Save Name"
-                onClick="{save}"
-            />
-        </footer>
-    </main>
-{/each}

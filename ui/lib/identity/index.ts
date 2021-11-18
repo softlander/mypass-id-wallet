@@ -63,10 +63,10 @@ export type PersonalData = {
 /**
  * Highest degree credential data
  */
-export type HighestDegreeDetails = {
+export type CollegeDegreeDetails = {
     Language: string;
     Locale: string;
-    HighestDegreeData: {
+    CollegeDegreeData: {
         CollegeName: string;
         RegistrationNumber: string;
         Program: string;

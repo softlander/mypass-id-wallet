@@ -1,7 +1,7 @@
 export enum SchemaNames {
     ADDRESS = 'Address',
     PERSONAL_DATA = 'PersonalData',
-    HIGHEST_DEGREE = "HighestDegree",
+    COLLEGE_DEGREE = "CollegeDegree",
     EMPLOYMENT = "Employment",
     TEST_RESULT = 'TestResult',
     VISA_APPLICATION = 'VisaApplication',
@@ -119,7 +119,7 @@ export const PersonalDataSchema = {
     }
 };
 
-export const HighestDegreeSchema = {
+export const CollegeDegreeSchema = {
     type: 'object',
     required: ['DID'],
     properties: {
@@ -132,7 +132,7 @@ export const HighestDegreeSchema = {
         Locale: {
             type: 'string'
         },
-        HighestDegree: {
+        CollegeDegree: {
             type: 'object',
             properties: {
                 CollegeName: {
@@ -439,7 +439,7 @@ export const PresentCommitmentsSchema = {
 export const Schemas = {
     [SchemaNames.ADDRESS]: AddressSchema,
     [SchemaNames.PERSONAL_DATA]: PersonalDataSchema,
-    [SchemaNames.HIGHEST_DEGREE]: HighestDegreeSchema,
+    [SchemaNames.COLLEGE_DEGREE]: CollegeDegreeSchema,
     [SchemaNames.EMPLOYMENT]: EmploymentSchema,
     [SchemaNames.TEST_RESULT]: TestResultSchema,
     [SchemaNames.VISA_APPLICATION]: VisaApplicationSchema,

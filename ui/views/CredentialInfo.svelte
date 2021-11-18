@@ -1,13 +1,19 @@
 <script>
-    import { onMount } from 'svelte';
-    import Button from '~/components/Button';
+    import { onMount } from "svelte";
+    import Button from "~/components/Button";
 
-    import { goto } from '~/lib/helpers';
-    import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
-    import { __IOS__ } from '~/lib/platform';
+    import { goto } from "~/lib/helpers";
+    import {
+        activeCredentialForInfo,
+        credentials,
+        modalStatus
+    } from "~/lib/store";
+    import { __IOS__ } from "~/lib/platform";
 
-    const credentialInfo = Object.keys($credentials[$activeCredentialForInfo].data).map((key) => ({
-        key: [key.replace(/([a-z](?=[A-Z]))/g, '$1 ')],
+    const credentialInfo = Object.keys(
+        $credentials[$activeCredentialForInfo].data
+    ).map(key => ({
+        key: [key.replace(/([a-z](?=[A-Z]))/g, "$1 ")],
         value: $credentials[$activeCredentialForInfo].data[key]
     }));
 
@@ -15,44 +21,113 @@
 
     onMount(() => {
         switch ($activeCredentialForInfo) {
-            case 'personal':
-                logo = 'government-logo';
+            case "personal":
+                logo = "government-logo";
                 break;
-            case 'highestDegree':
-                logo = 'degree-logo';
+            case "collegeDegree":
+                logo = "degree-logo";
                 break;
-            case 'employment':
-                logo = 'employement-logo';
+            case "employment":
+                logo = "employement-logo";
                 break;
-            case 'company':
-                logo = 'government-logo';
+            case "company":
+                logo = "government-logo";
                 break;
-            case 'bank':
-            case 'insurance':
-                logo = 'sns';
+            case "bank":
+            case "insurance":
+                logo = "sns";
                 break;
-            case 'futureCommitment':
-                logo = 'future_foundation';
+            case "futureCommitment":
+                logo = "future_foundation";
                 break;
-            case 'presentCommitment':
-                logo = 'present_foundation';
+            case "presentCommitment":
+                logo = "present_foundation";
                 break;
-            case 'immunity':
-                logo = 'health-authority-logo';
+            case "immunity":
+                logo = "health-authority-logo";
                 break;
-            case 'visa':
-                logo = 'border-agency-logo';
+            case "visa":
+                logo = "border-agency-logo";
         }
     });
 
     function share() {
-        modalStatus.set({ active: true, type: 'presentation' });
+        modalStatus.set({ active: true, type: "presentation" });
     }
 
     function goBack() {
-        goto('home');
+        goto("home");
     }
 </script>
+
+<main>
+    <div
+        class:logo-personal={$activeCredentialForInfo === 'personal'}
+        class:logo-collegeDegree={$activeCredentialForInfo === 'collegeDegree'}
+        class:logo-employment={$activeCredentialForInfo === 'employment'}
+        class:logo-immunity={$activeCredentialForInfo === 'immunity'}
+        class:logo-visa={$activeCredentialForInfo === 'visa'}
+        class:logo-company={$activeCredentialForInfo === 'company'}
+        class:logo-bank={$activeCredentialForInfo === 'bank'}
+        class:logo-insurance={$activeCredentialForInfo === 'insurance'}
+        class:logo-futureCommitment={$activeCredentialForInfo === 'futureCommitment'}
+        class:logo-presentCommitment={$activeCredentialForInfo === 'presentCommitment'}
+        class="wrapper"
+        class:wrapper-ios={__IOS__}
+    >
+        <img
+            class="chevron"
+            class:chevron-ios={__IOS__}
+            on:click={goBack}
+            src="chevron-left.svg"
+            alt=""
+        />
+
+        <div class="header" class:header-ios={__IOS__}>
+            <div class="header" class:header-ios={__IOS__}>
+                <img class="credential-logo" src={`${logo}.png`} alt="" />
+                <header>
+                    <p>{$credentials[$activeCredentialForInfo].heading}</p>
+                    <p>{$credentials[$activeCredentialForInfo].subheading}</p>
+                </header>
+                <ul>
+                    {#each credentialInfo as object}
+                        {#if object.key[0] && object.key[0] === 'commitments'}
+                            {#each object.value as commitment}
+                                {#if $activeCredentialForInfo === 'futureCommitment'}
+                                    <li>
+                                        <p>
+                                            Donate {commitment.commitmentWalletPercentage}%
+                                            of my wallet balance to support {commitment.commitmentSupport}
+                                        </p>
+                                    </li>
+                                {/if}
+                                {#if $activeCredentialForInfo === 'presentCommitment'}
+                                    <li>
+                                        <p>
+                                            I commit to {commitment.commitmentSupport}
+                                        </p>
+                                    </li>
+                                {/if}
+                            {/each}
+                        {:else}
+                            <li>
+                                <p>{object.key}</p>
+                                <span>{object.value}</span>
+                            </li>
+                        {/if}
+                    {/each}
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <Button label="Share" onClick={share}>
+                <img src="share.png" alt="" />
+            </Button>
+        </footer>
+    </div>
+</main>
 
 <style>
     main {
@@ -88,7 +163,7 @@
         background: #1b65d0;
     }
 
-    .logo-highestDegree {
+    .logo-collegeDegree {
         background: #1b65d0;
     }
 
@@ -130,7 +205,7 @@
 
     header > p:nth-child(1) {
         margin-top: 2vh;
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-weight: 1000;
         font-size: 3vw;
         line-height: 4vw;
@@ -140,7 +215,7 @@
 
     header > p:nth-child(2) {
         margin-top: 2vh;
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 6vw;
@@ -172,7 +247,7 @@
     }
 
     li > p {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-weight: 1000;
         font-size: 3vw;
         line-height: 4vw;
@@ -182,7 +257,7 @@
     }
 
     li > span {
-        font-family: 'Metropolis Regular', sans-serif;
+        font-family: "Metropolis Regular", sans-serif;
         font-weight: 600;
         font-size: 4vw;
         line-height: 6vw;
@@ -222,63 +297,3 @@
         width: 15%;
     }
 </style>
-
-<main>
-    <div
-        class:logo-personal="{$activeCredentialForInfo === 'personal'}"
-        class:logo-highestDegree="{$activeCredentialForInfo === 'highestDegree'}"
-        class:logo-employment="{$activeCredentialForInfo === 'employment'}"
-        class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
-        class:logo-visa="{$activeCredentialForInfo === 'visa'}"
-        class:logo-company="{$activeCredentialForInfo === 'company'}"
-        class:logo-bank="{$activeCredentialForInfo === 'bank'}"
-        class:logo-insurance="{$activeCredentialForInfo === 'insurance'}"
-        class:logo-futureCommitment="{$activeCredentialForInfo === 'futureCommitment'}"
-        class:logo-presentCommitment="{$activeCredentialForInfo === 'presentCommitment'}"
-        class="wrapper"
-        class:wrapper-ios="{__IOS__}"
-    >
-        <img class="chevron" class:chevron-ios="{__IOS__}" on:click="{goBack}" src="chevron-left.svg" alt="" />
-
-        <div class="header" class:header-ios="{__IOS__}">
-            <div class="header" class:header-ios="{__IOS__}">
-                <img class="credential-logo" src="{`${logo}.png`}" alt="" />
-                <header>
-                    <p>{$credentials[$activeCredentialForInfo].heading}</p>
-                    <p>{$credentials[$activeCredentialForInfo].subheading}</p>
-                </header>
-                <ul>
-                    {#each credentialInfo as object}
-                        {#if object.key[0] && object.key[0] === 'commitments'}
-                            {#each object.value as commitment}
-                                {#if $activeCredentialForInfo === 'futureCommitment'}
-                                    <li>
-                                        <p>
-                                            Donate {commitment.commitmentWalletPercentage}% of my wallet balance to support {commitment.commitmentSupport}
-                                        </p>
-                                    </li>
-                                {/if}
-                                {#if $activeCredentialForInfo === 'presentCommitment'}
-                                    <li>
-                                        <p>I commit to {commitment.commitmentSupport}</p>
-                                    </li>
-                                {/if}
-                            {/each}
-                        {:else}
-                            <li>
-                                <p>{object.key}</p>
-                                <span>{object.value}</span>
-                            </li>
-                        {/if}
-                    {/each}
-                </ul>
-            </div>
-        </div>
-
-        <footer>
-            <Button label="Share" onClick="{share}">
-                <img src="share.png" alt="" />
-            </Button>
-        </footer>
-    </div>
-</main>

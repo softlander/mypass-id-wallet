@@ -1,25 +1,25 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount } from "svelte";
 
-    import Notification from '~/components/Notification';
-    import Route from '~/components/Route';
-    import Theme from '~/components/Theme';
-    import Content from '~/components/modal/Content';
-    import Modal from '~/components/modal/Index';
-    import Socket from '~/components/Socket';
+    import Notification from "~/components/Notification";
+    import Route from "~/components/Route";
+    import Theme from "~/components/Theme";
+    import Content from "~/components/modal/Content";
+    import Modal from "~/components/modal/Index";
+    import Socket from "~/components/Socket";
 
-    import Home from '~/views/Home';
-    import Landing from '~/views/Landing';
-    import Password from '~/views/Password';
-    import CredentialInfo from '~/views/CredentialInfo';
-    import Name from '~/views/Name';
-    import Splash from '~/views/Splash';
-    import Scan from '~/views/Scan';
-    import Settings from '~/views/Settings';
+    import Home from "~/views/Home";
+    import Landing from "~/views/Landing";
+    import Password from "~/views/Password";
+    import CredentialInfo from "~/views/CredentialInfo";
+    import Name from "~/views/Name";
+    import Splash from "~/views/Splash";
+    import Scan from "~/views/Scan";
+    import Settings from "~/views/Settings";
 
-    import { SPLASH_SCREEN_TIMEOUT, VERSION } from '~/lib/config';
-    import { __WEB__ } from '~/lib/platform';
-    import { credentials, hasSetupAccount, dataVersion } from '~/lib/store';
+    import { SPLASH_SCREEN_TIMEOUT, VERSION } from "~/lib/config";
+    import { __WEB__ } from "~/lib/platform";
+    import { credentials, hasSetupAccount, dataVersion } from "~/lib/store";
     import {
         prepareBankInformation,
         prepareCompanyInformation,
@@ -29,12 +29,12 @@
         prepareVisaInformation,
         prepareFutureCommitmentInformation,
         preparePresentCommitmentInformation,
-        prepareHighestDegreeInformation
-    } from '~/lib/helpers';
+        prepareCollegeDegreeInformation
+    } from "~/lib/helpers";
 
-    import { retrieveCredential, clearIdentity } from '~/lib/identity';
+    import { retrieveCredential, clearIdentity } from "~/lib/identity";
 
-    import { SchemaNames } from '~/lib/identity/schemas';
+    import { SchemaNames } from "~/lib/identity/schemas";
 
     let displayHome = false;
     let splash = true;
@@ -52,7 +52,7 @@
             retrieveCredential(SchemaNames.ADDRESS),
             retrieveCredential(SchemaNames.PERSONAL_DATA),
             retrieveCredential(SchemaNames.CONTACT_DETAILS),
-            retrieveCredential(SchemaNames.HIGHEST_DEGREE),
+            retrieveCredential(SchemaNames.COLLEGE_DEGREE),
             retrieveCredential(SchemaNames.TEST_RESULT),
             retrieveCredential(SchemaNames.VISA_APPLICATION),
             retrieveCredential(SchemaNames.COMPANY),
@@ -60,12 +60,12 @@
             retrieveCredential(SchemaNames.INSURANCE),
             retrieveCredential(SchemaNames.FUTURE_COMMITMENTS),
             retrieveCredential(SchemaNames.PRESENT_COMMITMENTS)
-        ]).then((result) => {
+        ]).then(result => {
             const [
                 addressCredential,
                 personalDataCredential,
                 contactDetailsCredential,
-                highestDegreeCredential,
+                collegeDegreeCredential,
                 testResultCredential,
                 visaApplicationCredential,
                 companyCredential,
@@ -75,100 +75,146 @@
                 presentCommitmentCredential
             ] = result;
 
-            if (addressCredential && personalDataCredential && contactDetailsCredential) {
+            if (
+                addressCredential &&
+                personalDataCredential &&
+                contactDetailsCredential
+            ) {
                 const personalInfo = preparePersonalInformation(
                     addressCredential.credentialSubject,
                     personalDataCredential.credentialSubject,
                     contactDetailsCredential.credentialSubject
                 );
 
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        personal: Object.assign({}, existingCredentials.personal, {
-                            data: personalInfo
-                        })
+                        personal: Object.assign(
+                            {},
+                            existingCredentials.personal,
+                            {
+                                data: personalInfo
+                            }
+                        )
                     })
                 );
             }
 
-            if (highestDegreeCredential) {
-                const highestDegreeInfo = prepareHighestDegreeInformation(
-                    highestDegreeCredential.credentialSubject
+            if (collegeDegreeCredential) {
+                const collegeDegreeInfo = prepareCollegeDegreeInformation(
+                    collegeDegreeCredential.credentialSubject
                 );
 
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        highestDegree: Object.assign({}, existingCredentials.highestDegree, {
-                            data: highestDegreeInfo
-                        })
+                        collegeDegree: Object.assign(
+                            {},
+                            existingCredentials.collegeDegree,
+                            {
+                                data: collegeDegreeInfo
+                            }
+                        )
                     })
                 );
             }
 
             if (testResultCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        immunity: Object.assign({}, existingCredentials.immunity, {
-                            data: prepareImmunityInformation(testResultCredential.credentialSubject)
-                        })
+                        immunity: Object.assign(
+                            {},
+                            existingCredentials.immunity,
+                            {
+                                data: prepareImmunityInformation(
+                                    testResultCredential.credentialSubject
+                                )
+                            }
+                        )
                     })
                 );
             }
 
             if (visaApplicationCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
                         visa: Object.assign({}, existingCredentials.visa, {
-                            data: prepareVisaInformation(visaApplicationCredential.credentialSubject)
+                            data: prepareVisaInformation(
+                                visaApplicationCredential.credentialSubject
+                            )
                         })
                     })
                 );
             }
 
             if (companyCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        company: Object.assign({}, existingCredentials.company, {
-                            data: prepareCompanyInformation(companyCredential.credentialSubject)
-                        })
+                        company: Object.assign(
+                            {},
+                            existingCredentials.company,
+                            {
+                                data: prepareCompanyInformation(
+                                    companyCredential.credentialSubject
+                                )
+                            }
+                        )
                     })
                 );
             }
             if (bankCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
                         bank: Object.assign({}, existingCredentials.bank, {
-                            data: prepareBankInformation(bankCredential.credentialSubject)
+                            data: prepareBankInformation(
+                                bankCredential.credentialSubject
+                            )
                         })
                     })
                 );
             }
             if (insuranceCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        insurance: Object.assign({}, existingCredentials.insurance, {
-                            data: prepareInsuranceInformation(insuranceCredential.credentialSubject)
-                        })
+                        insurance: Object.assign(
+                            {},
+                            existingCredentials.insurance,
+                            {
+                                data: prepareInsuranceInformation(
+                                    insuranceCredential.credentialSubject
+                                )
+                            }
+                        )
                     })
                 );
             }
 
             if (futureCommitmentCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
-                            data: prepareFutureCommitmentInformation(futureCommitmentCredential.credentialSubject)
-                        })
+                        futureCommitment: Object.assign(
+                            {},
+                            existingCredentials.futureCommitment,
+                            {
+                                data: prepareFutureCommitmentInformation(
+                                    futureCommitmentCredential.credentialSubject
+                                )
+                            }
+                        )
                     })
                 );
             }
 
             if (presentCommitmentCredential) {
-                credentials.update((existingCredentials) =>
+                credentials.update(existingCredentials =>
                     Object.assign({}, existingCredentials, {
-                        presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
-                            data: preparePresentCommitmentInformation(presentCommitmentCredential.credentialSubject)
-                        })
+                        presentCommitment: Object.assign(
+                            {},
+                            existingCredentials.presentCommitment,
+                            {
+                                data: preparePresentCommitmentInformation(
+                                    presentCommitmentCredential.credentialSubject
+                                )
+                            }
+                        )
                     })
                 );
             }
