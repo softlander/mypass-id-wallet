@@ -25,6 +25,7 @@ export type QRLink = {
     | 'previousEmployer'
     | 'newEmployer'
     | 'healthAuthority'
+    | 'employer'
     | 'agency'
     | 'company'
     | 'insurance'
@@ -230,7 +231,7 @@ export const defaultCredentials: Credentials = {
         data: null
     },
     employmentHistory: {
-        heading: 'Employment',
+        heading: 'Employment History',
         subheading: 'Job Experience Certificate',
         data: null
     },

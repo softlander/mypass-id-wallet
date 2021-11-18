@@ -2,8 +2,32 @@
     export let onClick;
     export let heading;
     export let subheading;
-    export let type = 'personal';
+    export let type = "personal";
 </script>
+
+<li on:click={onClick}>
+    <span
+        class="icon"
+        class:personal={type === 'personal'}
+        class:immunity={type === 'immunity'}
+        class:collegeDegree={type === 'collegeDegree'}
+        class:employmentHistory={type === 'employmentHistory'}
+        class:jobOffer={type === 'jobOffer'}
+        class:visa={type === 'visa'}
+        class:company={type === 'company'}
+        class:bank={type === 'bank'}
+        class:insurance={type === 'insurance'}
+        class:futureCommitment={type === 'futureCommitment'}
+        class:presentCommitment={type === 'presentCommitment'}
+    >
+        <slot />
+    </span>
+    <div>
+        <h5>{heading}</h5>
+        <h6>{subheading}</h6>
+    </div>
+    <img src="chevron-right.svg" alt="" />
+</li>
 
 <style>
     li {
@@ -33,6 +57,16 @@
     }
 
     .immunity {
+        background: #13c4a3;
+    }
+
+    .collegeDegree {
+        background: #13c4a3;
+    }
+    .employmentHistory {
+        background: #13c4a3;
+    }
+    .jobOffer {
         background: #13c4a3;
     }
 
@@ -67,7 +101,7 @@
     }
 
     h5 {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-weight: 1000;
         font-size: 2.7vw;
         line-height: 4vw;
@@ -81,31 +115,10 @@
     }
 
     h6 {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: 600;
         font-size: 4vw;
         line-height: 7vw;
         color: #131f37;
     }
 </style>
-
-<li on:click="{onClick}">
-    <span
-        class="icon"
-        class:personal="{type === 'personal'}"
-        class:immunity="{type === 'immunity'}"
-        class:visa="{type === 'visa'}"
-        class:company="{type === 'company'}"
-        class:bank="{type === 'bank'}"
-        class:insurance="{type === 'insurance'}"
-        class:futureCommitment="{type === 'futureCommitment'}"
-        class:presentCommitment="{type === 'presentCommitment'}"
-    >
-        <slot />
-    </span>
-    <div>
-        <h5>{heading}</h5>
-        <h6>{subheading}</h6>
-    </div>
-    <img src="chevron-right.svg" alt="" />
-</li>

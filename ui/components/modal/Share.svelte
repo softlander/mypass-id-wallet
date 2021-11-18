@@ -1,5 +1,5 @@
 <script>
-    import { getContext } from 'svelte';
+    import { getContext } from "svelte";
 
     import {
         createCredential,
@@ -10,65 +10,89 @@
         storeIdentity,
         storeCredential,
         retrieveCredential
-    } from '~/lib/identity';
-    import { decrypt, parse, encrypt, parseLink } from '~/lib/helpers';
-    import { Schemas, SchemaNames } from '~/lib/identity/schemas';
+    } from "~/lib/identity";
+    import { decrypt, parse, encrypt, parseLink } from "~/lib/helpers";
+    import { Schemas, SchemaNames } from "~/lib/identity/schemas";
 
-    import { credentials, modalStatus } from '~/lib/store';
+    import { credentials, modalStatus } from "~/lib/store";
 
-    import Button from '~/components/Button';
-    import ListItem from '~/components/ListItem';
+    import Button from "~/components/Button";
+    import ListItem from "~/components/ListItem";
 
-    import Socket from '~/lib/socket';
+    import Socket from "~/lib/socket";
 
     let isProcessingVerifiablePresentations = false;
     export let props;
 
     const content = {
         healthAuthority: {
-            heading: 'Do you want to share this credential with “National Health Authority”?',
-            label: 'Share credential',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share this credential with “National Health Authority”?",
+            label: "Share credential",
+            closeText: "Cancel"
+        },
+        university: {
+            heading:
+                "Do you want to share these credentials with your university?",
+            label: "Share credentials",
+            closeText: "Cancel"
+        },
+        previousEmployer: {
+            heading:
+                "Do you want to share these credentials with your previous employer?",
+            label: "Share credentials",
+            closeText: "Cancel"
+        },
+        newEmployer: {
+            heading:
+                "Do you want to share these credentials with your new employer?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         employer: {
-            heading: 'Do you want to share these credentials with your employer?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share these credentials with your employer?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         agency: {
-            heading: 'Do you want to share these credentials with Border Agency?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share these credentials with Border Agency?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         company: {
-            heading: 'Do you want to share this credential with Company House?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading: "Do you want to share this credential with Company House?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         bank: {
-            heading: 'Do you want to share this credential with SNS Bank?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading: "Do you want to share this credential with SNS Bank?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         insurance: {
-            heading: 'Do you want to share this credential with SNS Bank?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading: "Do you want to share this credential with SNS Bank?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         ancestorRegistry: {
-            heading: 'Do you want to share this credential with “Good Ancestor Registry“?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share this credential with “Good Ancestor Registry“?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         futureCommitment: {
-            heading: 'Do you want to share this credential with “The Far Future Foundation“?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share this credential with “The Far Future Foundation“?",
+            label: "Share credentials",
+            closeText: "Cancel"
         },
         presentCommitment: {
-            heading: 'Do you want to share this credential with “The Now Foundation“?',
-            label: 'Share credentials',
-            closeText: 'Cancel'
+            heading:
+                "Do you want to share this credential with “The Now Foundation“?",
+            label: "Share credentials",
+            closeText: "Cancel"
         }
     };
 
@@ -87,12 +111,12 @@
     }
 
     function processVerifiablePresentations() {
-        retrieveIdentity('did').then((identity) => {
+        retrieveIdentity("did").then(identity => {
             props.requestedCredentials
                 .reduce((promise, schemaName) => {
-                    return promise.then((acc) => {
+                    return promise.then(acc => {
                         return retrieveCredential(schemaName)
-                            .then((credentials) => {
+                            .then(credentials => {
                                 acc[schemaName] = credentials;
 
                                 return acc;
@@ -100,21 +124,28 @@
                             .catch(console.log);
                     });
                 }, Promise.resolve({}))
-                .then((schemaNamesWithCredentials) =>
+                .then(schemaNamesWithCredentials =>
                     createVerifiablePresentations(
                         identity,
-                        Object.keys(schemaNamesWithCredentials).reduce((acc, schemaName) => {
-                            if (schemaNamesWithCredentials[schemaName]) {
-                                acc[schemaName] = schemaNamesWithCredentials[schemaName];
-                            }
+                        Object.keys(schemaNamesWithCredentials).reduce(
+                            (acc, schemaName) => {
+                                if (schemaNamesWithCredentials[schemaName]) {
+                                    acc[schemaName] =
+                                        schemaNamesWithCredentials[schemaName];
+                                }
 
-                            return acc;
-                        }, {}),
+                                return acc;
+                            },
+                            {}
+                        ),
                         props.challenge
                     )
                 )
-                .then((verifiablePresentations) => {
-                    const payload = encrypt(props.password, JSON.stringify(verifiablePresentations));
+                .then(verifiablePresentations => {
+                    const payload = encrypt(
+                        props.password,
+                        JSON.stringify(verifiablePresentations)
+                    );
 
                     sendVerifiablePresentations(props.channelId, payload);
 
@@ -122,83 +153,152 @@
 
                     modalStatus.set({ active: false, type: null });
 
-                    if (props.shareWith === 'healthAuthority') {
-                        credentials.update((existingCredentials) =>
+                    if (props.shareWith === "healthAuthority") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                immunity: Object.assign({}, existingCredentials.immunity, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                immunity: Object.assign(
+                                    {},
+                                    existingCredentials.immunity,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'agency') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "agency") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                visa: Object.assign({}, existingCredentials.visa, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                visa: Object.assign(
+                                    {},
+                                    existingCredentials.visa,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    }
-
-                    if (props.shareWith === 'company') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "university") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                company: Object.assign({}, existingCredentials.company, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                collegeDegree: Object.assign(
+                                    {},
+                                    existingCredentials.collegeDegree,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'bank') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "previousEmployer") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                bank: Object.assign({}, existingCredentials.bank, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                employmentHistory: Object.assign(
+                                    {},
+                                    existingCredentials.employmentHistory,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'insurance') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "newEmployer") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                insurance: Object.assign({}, existingCredentials.insurance, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                jobOffer: Object.assign(
+                                    {},
+                                    existingCredentials.jobOffer,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'ancestorRegistry') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "company") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                ancestorRegistry: Object.assign({}, existingCredentials.ancestorRegistry, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                company: Object.assign(
+                                    {},
+                                    existingCredentials.company,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'futureCommitment') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "bank") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                bank: Object.assign(
+                                    {},
+                                    existingCredentials.bank,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
-                    } else if (props.shareWith === 'presentCommitment') {
-                        credentials.update((existingCredentials) =>
+                    } else if (props.shareWith === "insurance") {
+                        credentials.update(existingCredentials =>
                             Object.assign({}, existingCredentials, {
-                                presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
-                                    channelId: props.channelId,
-                                    password: props.password
-                                })
+                                insurance: Object.assign(
+                                    {},
+                                    existingCredentials.insurance,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
+                            })
+                        );
+                    } else if (props.shareWith === "ancestorRegistry") {
+                        credentials.update(existingCredentials =>
+                            Object.assign({}, existingCredentials, {
+                                ancestorRegistry: Object.assign(
+                                    {},
+                                    existingCredentials.ancestorRegistry,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
+                            })
+                        );
+                    } else if (props.shareWith === "futureCommitment") {
+                        credentials.update(existingCredentials =>
+                            Object.assign({}, existingCredentials, {
+                                futureCommitment: Object.assign(
+                                    {},
+                                    existingCredentials.futureCommitment,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
+                            })
+                        );
+                    } else if (props.shareWith === "presentCommitment") {
+                        credentials.update(existingCredentials =>
+                            Object.assign({}, existingCredentials, {
+                                presentCommitment: Object.assign(
+                                    {},
+                                    existingCredentials.presentCommitment,
+                                    {
+                                        channelId: props.channelId,
+                                        password: props.password
+                                    }
+                                )
                             })
                         );
                     }
                 })
-                .catch((e) => {
+                .catch(e => {
                     console.error(e);
                     isProcessingVerifiablePresentations = false;
                 });
@@ -206,59 +306,83 @@
     }
 
     function sendVerifiablePresentations(channelId, payload) {
-        Socket.getActiveSocket(props.url).emit('verifiablePresentation', { channelId, payload });
+        Socket.getActiveSocket(props.url).emit("verifiablePresentation", {
+            channelId,
+            payload
+        });
     }
 
     function prepareCredentialsContent() {
         return props.requestedCredentials.reduce((acc, credential) => {
-            if (credential === 'PersonalData') {
+            if (credential === "PersonalData") {
                 acc.push({
-                    alias: 'personal',
-                    heading: 'Home Office',
-                    subheading: 'My Identity',
-                    icon: 'government-logo.png'
+                    alias: "personal",
+                    heading: "Home Office",
+                    subheading: "My Identity",
+                    icon: "government-logo.png"
                 });
-            } else if (credential === 'TestResult') {
+            } else if (credential === "TestResult") {
                 acc.push({
-                    alias: 'authority',
-                    heading: 'Public Health Authority',
-                    subheading: 'Health certificate',
-                    icon: 'health-authority-logo.png'
+                    alias: "authority",
+                    heading: "Public Health Authority",
+                    subheading: "Health certificate",
+                    icon: "health-authority-logo.png"
                 });
-            } else if (credential === 'Company') {
+            } else if (credential === "CollegeDegree") {
                 acc.push({
-                    alias: 'company',
-                    heading: 'Home Office',
-                    subheading: 'Company Details',
-                    icon: 'government-logo.png'
+                    alias: "degree",
+                    heading: "Education",
+                    subheading: "College Degree Certificate",
+                    icon: "degree-logo.png"
                 });
-            } else if (credential === 'BankAccount') {
+            } else if (credential === "EmploymentHistory") {
                 acc.push({
-                    alias: 'bank',
-                    heading: 'Company House',
-                    subheading: 'Company Details',
-                    icon: 'sns.png'
+                    alias: "employment",
+                    heading: "Employment History",
+                    subheading: "Job Experience Certificate",
+                    icon: "employment-logo.png"
                 });
-            } else if (credential === 'Insurance') {
+            } else if (credential === "JobOffer") {
                 acc.push({
-                    alias: 'company',
-                    heading: 'Insurance',
-                    subheading: 'Insruance Details',
-                    icon: 'sns.png'
+                    alias: "job",
+                    heading: "Job Offer",
+                    subheading: "Offer Details",
+                    icon: "job-offer-logo.png"
                 });
-            } else if (credential === 'FutureCommitments') {
+            } else if (credential === "Company") {
                 acc.push({
-                    alias: 'futureCommitment',
-                    heading: 'The Far Future Foundation ',
-                    subheading: 'Future Commitment',
-                    icon: 'future_foundation.png'
+                    alias: "company",
+                    heading: "Home Office",
+                    subheading: "Company Details",
+                    icon: "government-logo.png"
                 });
-            } else if (credential === 'PresentCommitments') {
+            } else if (credential === "BankAccount") {
                 acc.push({
-                    alias: 'presentCommitment',
-                    heading: 'The Now Foundation',
-                    subheading: 'Present Commitment',
-                    icon: 'present_foundation.png'
+                    alias: "bank",
+                    heading: "Company House",
+                    subheading: "Company Details",
+                    icon: "sns.png"
+                });
+            } else if (credential === "Insurance") {
+                acc.push({
+                    alias: "company",
+                    heading: "Insurance",
+                    subheading: "Insruance Details",
+                    icon: "sns.png"
+                });
+            } else if (credential === "FutureCommitments") {
+                acc.push({
+                    alias: "futureCommitment",
+                    heading: "The Far Future Foundation ",
+                    subheading: "Future Commitment",
+                    icon: "future_foundation.png"
+                });
+            } else if (credential === "PresentCommitments") {
+                acc.push({
+                    alias: "presentCommitment",
+                    heading: "The Now Foundation",
+                    subheading: "Present Commitment",
+                    icon: "present_foundation.png"
                 });
             }
 
@@ -266,6 +390,46 @@
         }, []);
     }
 </script>
+
+<section>
+    <p>{content[props.shareWith].heading}</p>
+
+    <span class="credentials">
+        {#each prepareCredentialsContent() as object}
+            <li>
+                <span
+                    class:icon-personal={object.alias === 'personal'}
+                    class:icon-authority={object.alias === 'authority'}
+                    class:icon-degree={object.alias === 'degree'}
+                    class:icon-employment={object.alias === 'employment'}
+                    class:icon-job={object.alias === 'job'}
+                    class:icon-company={object.alias === 'company'}
+                    class:icon-bank={object.alias === 'bank'}
+                    class:icon-insurance={object.alias === 'insurance'}
+                    class="icon"
+                >
+                    <img src={object.icon} alt="" />
+                </span>
+
+                <div>
+                    <h5>{object.heading}</h5>
+                    <h6>{object.subheading}</h6>
+                </div>
+            </li>
+        {/each}
+    </span>
+
+    <footer>
+        <Button
+            loading={isProcessingVerifiablePresentations}
+            label={content[props.shareWith].label}
+            onClick={share}
+        >
+            <img src="check.png" alt="" />
+        </Button>
+        <p on:click={decline}>{content[props.shareWith].closeText}</p>
+    </footer>
+</section>
 
 <style>
     section {
@@ -277,7 +441,7 @@
     }
 
     p:nth-child(1) {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: bold;
         font-size: 6vw;
         line-height: 8vw;
@@ -287,7 +451,7 @@
     }
 
     p:last-child {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 5vw;
@@ -339,6 +503,16 @@
         background: #c995f1;
     }
 
+    .icon-degree {
+        background: #c995f1;
+    }
+    .icon-employment {
+        background: #c995f1;
+    }
+    .icon-job {
+        background: #c995f1;
+    }
+
     .icon-company,
     .icon-bank,
     .icon-insurance {
@@ -350,7 +524,7 @@
     }
 
     h5 {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-weight: 1000;
         font-size: 3vw;
         line-height: 4vw;
@@ -364,7 +538,7 @@
     }
 
     h6 {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: 600;
         font-size: 4vw;
         line-height: 7vw;
@@ -385,36 +559,3 @@
         margin: 3vh 0;
     }
 </style>
-
-<section>
-    <p>{content[props.shareWith].heading}</p>
-
-    <span class="credentials">
-        {#each prepareCredentialsContent() as object}
-            <li>
-                <span
-                    class:icon-personal="{object.alias === 'personal'}"
-                    class:icon-authority="{object.alias === 'authority'}"
-                    class:icon-company="{object.alias === 'company'}"
-                    class:icon-bank="{object.alias === 'bank'}"
-                    class:icon-insurance="{object.alias === 'insurance'}"
-                    class="icon"
-                >
-                    <img src="{object.icon}" alt="" />
-                </span>
-
-                <div>
-                    <h5>{object.heading}</h5>
-                    <h6>{object.subheading}</h6>
-                </div>
-            </li>
-        {/each}
-    </span>
-
-    <footer>
-        <Button loading="{isProcessingVerifiablePresentations}" label="{content[props.shareWith].label}" onClick="{share}">
-            <img src="check.png" alt="" />
-        </Button>
-        <p on:click="{decline}">{content[props.shareWith].closeText}</p>
-    </footer>
-</section>

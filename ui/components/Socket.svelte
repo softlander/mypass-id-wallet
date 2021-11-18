@@ -1,29 +1,33 @@
 <script>
-    import { onDestroy } from 'svelte';
-    import io from 'socket.io-client';
+    import { onDestroy } from "svelte";
+    import io from "socket.io-client";
 
-    import { credentials, socketConnectionState, modalStatus } from '~/lib/store';
-    import { decrypt, parse } from '~/lib/helpers';
-    import { SchemaNames } from '~/lib/identity/schemas';
-    import { VERSION } from '~/lib/config';
-    import Socket from '~/lib/socket';
+    import {
+        credentials,
+        socketConnectionState,
+        modalStatus
+    } from "~/lib/store";
+    import { decrypt, parse } from "~/lib/helpers";
+    import { SchemaNames } from "~/lib/identity/schemas";
+    import { VERSION } from "~/lib/config";
+    import Socket from "~/lib/socket";
 
-    const unsubscribe = socketConnectionState.subscribe((state) => {
-        if (state.state === 'registerMobileClient') {
+    const unsubscribe = socketConnectionState.subscribe(state => {
+        if (state.state === "registerMobileClient") {
             establishConnection(state.payload.url);
             registerMobileClient(state.payload.url, state.payload.channelId);
 
-            socketConnectionState.set({ state: 'connected', payload: null });
+            socketConnectionState.set({ state: "connected", payload: null });
         }
     });
 
     onDestroy(() => {
         unsubscribe();
-        socketConnectionState.set({ state: 'disconnected', payload: null });
+        socketConnectionState.set({ state: "disconnected", payload: null });
     });
 
     function establishConnection(url) {
-        const urls = Socket.connections.map((connection) => connection.url);
+        const urls = Socket.connections.map(connection => connection.url);
 
         if (!urls.includes(url)) {
             Socket.connections.push({
@@ -33,25 +37,31 @@
                     reconnectionDelay: 500,
                     jsonp: false,
                     reconnectionAttempts: Infinity,
-                    transports: ['websocket']
+                    transports: ["websocket"]
                 })
             });
         }
 
         // Set state in store
-        socketConnectionState.set({ state: 'connected', payload: null });
+        socketConnectionState.set({ state: "connected", payload: null });
 
         initiateListeners();
     }
 
     function initiateListeners() {
-        Socket.connections.forEach((connection) => {
-            connection.socket.on('createCredential', (message) => {
+        Socket.connections.forEach(connection => {
+            connection.socket.on("createCredential", message => {
                 const { url, schemaName, data } = message;
 
                 let password = $credentials.immunity.password;
 
-                if (schemaName === SchemaNames.VISA_APPLICATION) {
+                if (schemaName === SchemaNames.COLLEGE_DEGREE) {
+                    password = $credentials.collegeDegree.password;
+                } else if (schemaName === SchemaNames.EMPLOYMENT_HISTORY) {
+                    password = $credentials.employmentHistory.password;
+                } else if (schemaName === SchemaNames.JOB_OFFER) {
+                    password = $credentials.jobOffer.password;
+                } else if (schemaName === SchemaNames.VISA_APPLICATION) {
                     password = $credentials.visa.password;
                 } else if (schemaName === SchemaNames.COMPANY) {
                     password = $credentials.company.password;
@@ -70,12 +80,19 @@
                 payload.data = parse(decrypt(password, data));
                 payload.url = url;
 
-                modalStatus.set({ active: true, type: 'accept', props: { schemaName, payload } });
+                modalStatus.set({
+                    active: true,
+                    type: "accept",
+                    props: { schemaName, payload }
+                });
             });
         });
     }
 
     function registerMobileClient(url, channelId) {
-        Socket.getActiveSocket(url).emit('registerMobileClient', { channelId, version: VERSION });
+        Socket.getActiveSocket(url).emit("registerMobileClient", {
+            channelId,
+            version: VERSION
+        });
     }
 </script>

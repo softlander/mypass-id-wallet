@@ -1,6 +1,6 @@
 <script>
-    import { getContext } from 'svelte';
-    import randomstring from 'randomstring';
+    import { getContext } from "svelte";
+    import randomstring from "randomstring";
 
     import {
         createCredential,
@@ -11,7 +11,7 @@
         storeIdentity,
         storeCredential,
         retrieveCredential
-    } from '~/lib/identity';
+    } from "~/lib/identity";
     import {
         prepareBankInformation,
         prepareInsuranceInformation,
@@ -23,123 +23,168 @@
         decrypt,
         parse,
         encrypt,
-        parseLink
-    } from '~/lib/helpers';
-    import { Schemas, SchemaNames } from '~/lib/identity/schemas';
+        parseLink,
+        prepareCollegeDegreeInformation,
+        prepareEmploymentHistory,
+        prepareJobOfferInformation
+    } from "~/lib/helpers";
+    import { Schemas, SchemaNames } from "~/lib/identity/schemas";
 
-    import { credentials, modalStatus } from '~/lib/store';
+    import { credentials, modalStatus } from "~/lib/store";
 
-    import Button from '~/components/Button';
-    import ListItem from '~/components/ListItem';
+    import Button from "~/components/Button";
+    import ListItem from "~/components/ListItem";
 
-    import Socket from '~/lib/socket';
+    import Socket from "~/lib/socket";
 
     export let props;
     let isCreatingCredential = false;
 
     const content = {
-        immunity: {
-            heading: 'Accept certificate?',
+        collegeDegree: {
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'Public Health Authority',
-                    subheading: 'Health Certificate',
-                    icon: 'health-authority-logo.png'
+                    heading: "Education",
+                    subheading: "College Degree Certificate",
+                    icon: "degree-logo.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
+        },
+        employmentHistory: {
+            heading: "Accept certificate?",
+            listItems: [
+                {
+                    heading: "Employment History",
+                    subheading: "Job Experience Certificate",
+                    icon: "employment-logo.png"
+                }
+            ],
+            label: "Accept certificate",
+            closeText: "Decline"
+        },
+        jobOffer: {
+            heading: "Accept certificate?",
+            listItems: [
+                {
+                    heading: "Job Offer",
+                    subheading: "Offer Details",
+                    icon: "job-offer-logo.png"
+                }
+            ],
+            label: "Accept certificate",
+            closeText: "Decline"
+        },
+        immunity: {
+            heading: "Accept certificate?",
+            listItems: [
+                {
+                    heading: "Public Health Authority",
+                    subheading: "Health Certificate",
+                    icon: "health-authority-logo.png"
+                }
+            ],
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         visa: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'Foreign Border Agency',
-                    subheading: 'Travel Visa',
-                    icon: 'border-agency-logo.png'
+                    heading: "Foreign Border Agency",
+                    subheading: "Travel Visa",
+                    icon: "border-agency-logo.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         company: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'Company House',
-                    subheading: 'Business Details',
-                    icon: 'government-logo.png'
+                    heading: "Company House",
+                    subheading: "Business Details",
+                    icon: "government-logo.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         bank: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'SNS Bank',
-                    subheading: 'Bank Details',
-                    icon: 'company-logo.png'
+                    heading: "SNS Bank",
+                    subheading: "Bank Details",
+                    icon: "company-logo.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         insurance: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'SNS Bank',
-                    subheading: 'Liability Insurance',
-                    icon: 'sns.png'
+                    heading: "SNS Bank",
+                    subheading: "Liability Insurance",
+                    icon: "sns.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         futureCommitment: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'Far Future Foundation',
-                    subheading: 'Future Commitment',
-                    icon: 'future_foundation.png'
+                    heading: "Far Future Foundation",
+                    subheading: "Future Commitment",
+                    icon: "future_foundation.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         },
         presentCommitment: {
-            heading: 'Accept certificate?',
+            heading: "Accept certificate?",
             listItems: [
                 {
-                    heading: 'The Now Foundation',
-                    subheading: 'Present Commitment',
-                    icon: 'present_foundation.png'
+                    heading: "The Now Foundation",
+                    subheading: "Present Commitment",
+                    icon: "present_foundation.png"
                 }
             ],
-            label: 'Accept certificate',
-            closeText: 'Decline'
+            label: "Accept certificate",
+            closeText: "Decline"
         }
     };
 
     function schemaNameToContentKeyMapper(schemaName) {
         switch (schemaName) {
-            case 'TestResult':
-                return 'immunity';
-            case 'Company':
-                return 'company';
-            case 'BankAccount':
-                return 'bank';
-            case 'Insurance':
-                return 'insurance';
-            case 'FutureCommitments':
-                return 'futureCommitment';
-            case 'PresentCommitments':
-                return 'presentCommitment';
+            case "TestResult":
+                return "immunity";
+            case "CollegeDegree":
+                return "collegeDegree";
+            case "EmploymentHistory":
+                return "employmentHistory";
+            case "JobOffer":
+                return "jobOffer";
+            case "Company":
+                return "company";
+            case "BankAccount":
+                return "bank";
+            case "Insurance":
+                return "insurance";
+            case "FutureCommitments":
+                return "futureCommitment";
+            case "PresentCommitments":
+                return "presentCommitment";
             default:
-                return 'visa';
+                return "visa";
         }
     }
 
@@ -152,13 +197,16 @@
     function decline() {
         let channelId = $credentials.immunity.channelId;
 
-        if (customSchemaName === 'visa') {
+        // #TODO add decline for other types as well
+        if (customSchemaName === "visa") {
             channelId = $credentials.visa.channelId;
+        } else if (customSchemaName === "jobOffer") {
+            channelId = $credentials.jobOffer.channelId;
         }
 
-        Socket.getActiveSocket(props.payload.url).emit('rejectCredentials', {
+        Socket.getActiveSocket(props.payload.url).emit("rejectCredentials", {
             channelId,
-            payload: 'The request to accept credentials was declined.'
+            payload: "The request to accept credentials was declined."
         });
 
         modalStatus.set({ active: false, type: null });
@@ -169,144 +217,278 @@
 
         isCreatingCredential = true;
 
-        if (customSchemaName === 'company') {
+        if (customSchemaName === "company") {
             payload.data.CompanyNumber = randomstring.generate({
                 length: 7,
-                charset: 'numeric'
+                charset: "numeric"
             });
             payload.data.CompanyOwner = `${$credentials.personal.data.firstName} ${$credentials.personal.data.lastName}`;
-            payload.data.CompanyStatus = 'Pending';
-            payload.data.CompanyCreationDate = new Date().toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-        } else if (customSchemaName === 'bank') {
+            payload.data.CompanyStatus = "Pending";
+            payload.data.CompanyCreationDate = new Date().toLocaleDateString(
+                "en-GB",
+                {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+        } else if (customSchemaName === "bank") {
             payload.data.AccountNumber = randomstring.generate({
                 length: 11,
-                charset: 'numeric'
+                charset: "numeric"
             });
-        } else if (customSchemaName === 'insurance') {
-            payload.data.Name = 'SNS Bank';
+        } else if (customSchemaName === "insurance") {
+            payload.data.Name = "SNS Bank";
             const date = new Date();
 
             payload.data.StartDate = date.toLocaleDateString();
-            payload.data.EndDate = new Date(date.setFullYear(date.getFullYear() + 1)).toLocaleDateString();
+            payload.data.EndDate = new Date(
+                date.setFullYear(date.getFullYear() + 1)
+            ).toLocaleDateString();
         }
 
         retrieveIdentity()
-            .then((identity) => {
-                createCredential(identity, schemaName, payload.data).then((credential) =>
-                    storeCredential(schemaName, credential).then(() => {
-                        let password = $credentials.immunity.password;
-                        let channelId = $credentials.immunity.channelId;
+            .then(identity => {
+                createCredential(identity, schemaName, payload.data).then(
+                    credential =>
+                        storeCredential(schemaName, credential).then(() => {
+                            let password = $credentials.immunity.password;
+                            let channelId = $credentials.immunity.channelId;
 
-                        if (customSchemaName === 'visa') {
-                            password = $credentials.visa.password;
-                            channelId = $credentials.visa.channelId;
-                        }
+                            if (customSchemaName === "visa") {
+                                password = $credentials.visa.password;
+                                channelId = $credentials.visa.channelId;
+                            } else if (customSchemaName === "collegeDegree") {
+                                password = $credentials.collegeDegree.password;
+                                channelId =
+                                    $credentials.collegeDegree.channelId;
+                            } else if (
+                                customSchemaName === "employmentHistory"
+                            ) {
+                                password =
+                                    $credentials.employmentHistory.password;
+                                channelId =
+                                    $credentials.employmentHistory.channelId;
+                            } else if (customSchemaName === "jobOffer") {
+                                password = $credentials.jobOffer.password;
+                                channelId = $credentials.jobOffer.channelId;
+                            } else if (customSchemaName === "bank") {
+                                password = $credentials.bank.password;
+                                channelId = $credentials.bank.channelId;
+                            } else if (customSchemaName === "insurance") {
+                                password = $credentials.insurance.password;
+                                channelId = $credentials.insurance.channelId;
+                            } else if (customSchemaName === "company") {
+                                password = $credentials.company.password;
+                                channelId = $credentials.company.channelId;
 
-                        if (customSchemaName === 'bank') {
-                            password = $credentials.bank.password;
-                            channelId = $credentials.bank.channelId;
-                        } else if (customSchemaName === 'insurance') {
-                            password = $credentials.insurance.password;
-                            channelId = $credentials.insurance.channelId;
-                        } else if (customSchemaName === 'company') {
-                            password = $credentials.company.password;
-                            channelId = $credentials.company.channelId;
-                        } else if (customSchemaName === 'futureCommitment') {
-                            password = $credentials.futureCommitment.password;
-                            channelId = $credentials.futureCommitment.channelId;
-                        } else if (customSchemaName === 'presentCommitment') {
-                            password = $credentials.presentCommitment.password;
-                            channelId = $credentials.presentCommitment.channelId;
-                        }
+                                Socket.getActiveSocket(payload.url).emit(
+                                    "createCompany",
+                                    {
+                                        payload: payload.data
+                                    }
+                                );
+                            } else if (
+                                customSchemaName === "futureCommitment"
+                            ) {
+                                password =
+                                    $credentials.futureCommitment.password;
+                                channelId =
+                                    $credentials.futureCommitment.channelId;
+                            } else if (
+                                customSchemaName === "presentCommitment"
+                            ) {
+                                password =
+                                    $credentials.presentCommitment.password;
+                                channelId =
+                                    $credentials.presentCommitment.channelId;
+                            }
 
-                        Socket.getActiveSocket(payload.url).emit('createCompany', { payload: payload.data });
+                            Socket.getActiveSocket(payload.url).emit(
+                                "createCredentialConfirmation",
+                                {
+                                    channelId: channelId,
+                                    payload: encrypt(
+                                        password,
+                                        JSON.stringify({
+                                            status: "success",
+                                            payload
+                                        })
+                                    )
+                                }
+                            );
 
-                        Socket.getActiveSocket(payload.url).emit('createCredentialConfirmation', {
-                            channelId: channelId,
-                            payload: encrypt(password, JSON.stringify({ status: 'success', payload }))
-                        });
+                            if (customSchemaName === "immunity") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        immunity: Object.assign(
+                                            {},
+                                            existingCredentials.immunity,
+                                            {
+                                                data: prepareImmunityInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "collegeDegree") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        collegeDegree: Object.assign(
+                                            {},
+                                            existingCredentials.collegeDegree,
+                                            {
+                                                data: prepareCollegeDegreeInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (
+                                customSchemaName === "employmentHistory"
+                            ) {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        employmentHistory: Object.assign(
+                                            {},
+                                            existingCredentials.employmentHistory,
+                                            {
+                                                data: prepareEmploymentHistory(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "jobOffer") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        jobOffer: Object.assign(
+                                            {},
+                                            existingCredentials.jobOffer,
+                                            {
+                                                data: prepareJobOfferInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "visa") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        visa: Object.assign(
+                                            {},
+                                            existingCredentials.visa,
+                                            {
+                                                data: prepareVisaInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "bank") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        bank: Object.assign(
+                                            {},
+                                            existingCredentials.bank,
+                                            {
+                                                data: prepareBankInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "insurance") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        insurance: Object.assign(
+                                            {},
+                                            existingCredentials.insurance,
+                                            {
+                                                data: prepareInsuranceInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (customSchemaName === "company") {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        company: Object.assign(
+                                            {},
+                                            existingCredentials.company,
+                                            {
+                                                data: prepareCompanyInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (
+                                customSchemaName === "futureCommitment"
+                            ) {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        futureCommitment: Object.assign(
+                                            {},
+                                            existingCredentials.futureCommitment,
+                                            {
+                                                data: prepareFutureCommitmentInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            } else if (
+                                customSchemaName === "presentCommitment"
+                            ) {
+                                credentials.update(existingCredentials =>
+                                    Object.assign({}, existingCredentials, {
+                                        presentCommitment: Object.assign(
+                                            {},
+                                            existingCredentials.presentCommitment,
+                                            {
+                                                data: preparePresentCommitmentInformation(
+                                                    credential.credentialSubject
+                                                ),
+                                                password: null,
+                                                channelId: null
+                                            }
+                                        )
+                                    })
+                                );
+                            }
 
-                        if (customSchemaName === 'immunity') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    immunity: Object.assign({}, existingCredentials.immunity, {
-                                        data: prepareImmunityInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        } else if (customSchemaName === 'visa') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    visa: Object.assign({}, existingCredentials.visa, {
-                                        data: prepareVisaInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        }
-
-                        if (customSchemaName === 'bank') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    bank: Object.assign({}, existingCredentials.bank, {
-                                        data: prepareBankInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        } else if (customSchemaName === 'insurance') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    insurance: Object.assign({}, existingCredentials.insurance, {
-                                        data: prepareInsuranceInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        } else if (customSchemaName === 'company') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    company: Object.assign({}, existingCredentials.company, {
-                                        data: prepareCompanyInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        } else if (customSchemaName === 'futureCommitment') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
-                                        data: prepareFutureCommitmentInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        } else if (customSchemaName === 'presentCommitment') {
-                            credentials.update((existingCredentials) =>
-                                Object.assign({}, existingCredentials, {
-                                    presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
-                                        data: preparePresentCommitmentInformation(credential.credentialSubject),
-                                        password: null,
-                                        channelId: null
-                                    })
-                                })
-                            );
-                        }
-
-                        modalStatus.set({ active: false, type: null });
-                        isCreatingCredential = false;
-                    })
+                            modalStatus.set({ active: false, type: null });
+                            isCreatingCredential = false;
+                        })
                 );
             })
             .catch(() => {
@@ -314,6 +496,43 @@
             });
     }
 </script>
+
+<section>
+    <p>{content[customSchemaName].heading}</p>
+
+    <span class="credentials">
+        {#each content[customSchemaName].listItems as object}
+            <li>
+                <span
+                    class="icon"
+                    class:icon-immunity={customSchemaName === 'immunity'}
+                    class:icon-collegeDegree={customSchemaName === 'collegeDegree'}
+                    class:icon-employmentHistory={customSchemaName === 'employmentHistory'}
+                    class:icon-jobOffer={customSchemaName === 'jobOffer'}
+                    class:icon-visa={customSchemaName === 'visa'}
+                >
+                    <img src={object.icon} alt="" />
+                </span>
+
+                <div>
+                    <h5>{object.heading}</h5>
+                    <h6>{object.subheading}</h6>
+                </div>
+            </li>
+        {/each}
+    </span>
+
+    <footer>
+        <Button
+            loading={isCreatingCredential}
+            label={content[customSchemaName].label}
+            onClick={accept}
+        >
+            <img src="check.png" alt="" />
+        </Button>
+        <p on:click={decline}>{content[customSchemaName].closeText}</p>
+    </footer>
+</section>
 
 <style>
     section {
@@ -325,7 +544,7 @@
     }
 
     p:nth-child(1) {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: bold;
         font-size: 6vw;
         line-height: 8vw;
@@ -335,7 +554,7 @@
     }
 
     p:last-child {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 5vw;
@@ -384,6 +603,18 @@
         background: #13c4a3;
     }
 
+    .icon-collegeDegree {
+        background: #13c4a3;
+    }
+
+    .icon-employmentHistory {
+        background: #13c4a3;
+    }
+
+    .icon-jobOffer {
+        background: #13c4a3;
+    }
+
     .icon-visa {
         background: #102e68;
     }
@@ -393,7 +624,7 @@
     }
 
     h5 {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-weight: 1000;
         font-size: 3vw;
         line-height: 4vw;
@@ -407,7 +638,7 @@
     }
 
     h6 {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: 600;
         font-size: 4vw;
         line-height: 7vw;
@@ -428,33 +659,3 @@
         margin: 3vh 0;
     }
 </style>
-
-<section>
-    <p>{content[customSchemaName].heading}</p>
-
-    <span class="credentials">
-        {#each content[customSchemaName].listItems as object}
-            <li>
-                <span
-                    class="icon"
-                    class:icon-immunity="{customSchemaName === 'immunity'}"
-                    class:icon-visa="{customSchemaName === 'visa'}"
-                >
-                    <img src="{object.icon}" alt="" />
-                </span>
-
-                <div>
-                    <h5>{object.heading}</h5>
-                    <h6>{object.subheading}</h6>
-                </div>
-            </li>
-        {/each}
-    </span>
-
-    <footer>
-        <Button loading="{isCreatingCredential}" label="{content[customSchemaName].label}" onClick="{accept}">
-            <img src="check.png" alt="" />
-        </Button>
-        <p on:click="{decline}">{content[customSchemaName].closeText}</p>
-    </footer>
-</section>
