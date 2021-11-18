@@ -2,7 +2,7 @@ export enum SchemaNames {
     ADDRESS = 'Address',
     PERSONAL_DATA = 'PersonalData',
     COLLEGE_DEGREE = "CollegeDegree",
-    EMPLOYMENT = "Employment",
+    EMPLOYMENT_HISTORY = "EmploymentHistory",
     TEST_RESULT = 'TestResult',
     VISA_APPLICATION = 'VisaApplication',
     BANK_ACCOUNT = 'BankAccount',
@@ -158,7 +158,7 @@ export const CollegeDegreeSchema = {
     }
 };
 
-export const EmploymentSchema = {
+export const EmploymentHistorySchema = {
     type: 'object',
     required: ['DID'],
     properties: {
@@ -440,7 +440,7 @@ export const Schemas = {
     [SchemaNames.ADDRESS]: AddressSchema,
     [SchemaNames.PERSONAL_DATA]: PersonalDataSchema,
     [SchemaNames.COLLEGE_DEGREE]: CollegeDegreeSchema,
-    [SchemaNames.EMPLOYMENT]: EmploymentSchema,
+    [SchemaNames.EMPLOYMENT_HISTORY]: EmploymentHistorySchema,
     [SchemaNames.TEST_RESULT]: TestResultSchema,
     [SchemaNames.VISA_APPLICATION]: VisaApplicationSchema,
     [SchemaNames.BANK_ACCOUNT]: BankAccountSchema,

@@ -8,7 +8,7 @@ import {
     TestResultData,
     PersonalData,
     CollegeDegreeDetails,
-    EmploymentDetails,
+    EmploymentHistoryDetails,
     VisaApplicationData,
     BankData,
     CompanyData,
@@ -21,7 +21,7 @@ import {
     QRLink,
     PersonalInfo,
     CollegeDegreeInfo,
-    EmploymentInfo,
+    EmploymentHistoryInfo,
     ImmunityInfo,
     VisaInfo,
     InsuranceInfo,
@@ -260,15 +260,15 @@ export const prepareCollegeDegreeInformation = (
 /**
  * Prepares employment information
  *
- * @method prepareEmploymentInformation
+ * @method prepareEmploymentHistory
  *
- * @param {EmploymentDetails} employmentData
+ * @param {EmploymentHistoryDetails} employmentData
  *
- * @returns {EmploymentInfo}
+ * @returns {EmploymentHistoryInfo}
  */
-export const prepareEmploymentInformation = (
-    employmentData: EmploymentDetails
-): EmploymentInfo => ({
+export const prepareEmploymentHistory = (
+    employmentData: EmploymentHistoryDetails
+): EmploymentHistoryInfo => ({
     companyName: employmentData.Employer.CompanyName,
     companyAddress: employmentData.Employer.CompanyAddress,
     employeeID: employmentData.Employer.EmployeeID,

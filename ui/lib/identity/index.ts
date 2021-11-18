@@ -77,9 +77,9 @@ export type CollegeDegreeDetails = {
 };
 
 /**
- * Employment credential data
+ * EmploymentHistory credential data
  */
-export type EmploymentDetails = {
+export type EmploymentHistoryDetails = {
     Language: string;
     Locale: string;
     Employer: {

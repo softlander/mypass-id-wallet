@@ -10,7 +10,7 @@
     import {
         preparePersonalInformation,
         prepareCollegeDegreeInformation,
-        prepareEmploymentInformation,
+        prepareEmploymentHistory,
         getRandomUserData,
         goto,
         delay
@@ -119,19 +119,23 @@
                                     }
                                 }
                             ),
-                            createCredential(identity, SchemaNames.EMPLOYMENT, {
-                                Employer: {
-                                    CompanyName: "CoolSoft",
-                                    CompanyAddress: "Bengaluru, India",
-                                    EmployeeID: Math.random()
-                                        .toString(36)
-                                        .substring(4)
-                                        .toUpperCase(),
-                                    LastDesignation: "Software Developer",
-                                    StartDate: "2020",
-                                    EndDate: "2022"
+                            createCredential(
+                                identity,
+                                SchemaNames.EMPLOYMENT_HISTORY,
+                                {
+                                    Employer: {
+                                        CompanyName: "CoolSoft",
+                                        CompanyAddress: "Bengaluru, India",
+                                        EmployeeID: Math.random()
+                                            .toString(36)
+                                            .substring(4)
+                                            .toUpperCase(),
+                                        LastDesignation: "Software Developer",
+                                        StartDate: "2020",
+                                        EndDate: "2022"
+                                    }
                                 }
-                            }),
+                            ),
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
@@ -185,7 +189,7 @@
                 .then(result => {
                     const [
                         collegeDegreeCredential,
-                        employemntCredential,
+                        employmentHistoryCredential,
                         addressCredential,
                         personalDataCredential,
                         contactDetailsCredential
@@ -196,8 +200,8 @@
                             collegeDegreeCredential
                         ),
                         storeCredential(
-                            SchemaNames.EMPLOYMENT,
-                            employemntCredential
+                            SchemaNames.EMPLOYMENT_HISTORY,
+                            employmentHistoryCredential
                         ),
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(
@@ -228,8 +232,8 @@
                         );
 
                         const employmentInfo = {
-                            ...prepareEmploymentInformation(
-                                employemntCredential.credentialSubject
+                            ...prepareEmploymentHistory(
+                                employmentHistoryCredential.credentialSubject
                             )
                         };
 
