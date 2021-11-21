@@ -11,7 +11,12 @@
 
     .logo {
         text-align: center;
-        padding: 1vh 8vw 4vh;
+        /* padding: 1vh 8vw 4vh; */
+    }
+
+    img  {
+        height: 150px;
+        width: 117px;
     }
 
     header > p {
@@ -26,7 +31,7 @@
 
 <div class="container">
     <div class="logo">
-        <img src="selv-header.svg" alt="" />
+        <img src="mypass-black.svg" alt="" />
     </div>
 
     <header>

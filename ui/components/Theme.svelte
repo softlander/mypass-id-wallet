@@ -50,19 +50,19 @@
         --max-width: 100vw;
         --max-height: 100vh;
 
-        --bg: #f2f7fb;
-        --bg-secondary: #1b65d0;
+        --bg: #fdeceb;
+        --bg-secondary: #EA4335;
 
-        --primary: #4b4fe3;
+        --primary: #EA4335;
         --primary-fg: #eff0ff;
 
-        --button-bg: #2c80fc;
+        --button-bg: #EA4335;
         --button-fg: #ffffff;
 
         --input-bg: #ffffff;
-        --input-border: #d9e1ee;
+        --input-border: #eedcd9;
         --input-placeholder: #9ca1ab;
-        --input-active: #677ca9;
+        --input-active: #bb362a;
 
         --qr: #13c4a3;
         --qr-bg: #1b65d0;
@@ -98,7 +98,7 @@
     :global(button) {
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
-        box-shadow: 0px 2px 20px rgba(78, 83, 229, 0.4);
+        box-shadow: 0px 2px 20px rgba(234, 68, 53, 0.4);
         background: var(--button-bg);
         color: var(--button-fg);
     }
