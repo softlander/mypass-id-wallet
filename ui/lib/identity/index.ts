@@ -64,32 +64,26 @@ export type PersonalData = {
  * Highest degree credential data
  */
 export type CollegeDegreeDetails = {
-    Language: string;
-    Locale: string;
-    CollegeDegreeData: {
-        CollegeName: string;
-        RegistrationNumber: string;
-        Program: string;
-        Branch: string;
-        EnrollingYear: string;
-        GraduationYear: string;
-    };
+    CollegeName: string;
+    RegistrationNumber: string;
+    Program: string;
+    Branch: string;
+    EnrollingYear: string;
+    GraduationYear: string;
+
 };
 
 /**
  * EmploymentHistory credential data
  */
 export type EmploymentHistoryDetails = {
-    Language: string;
-    Locale: string;
-    Employer: {
-        CompanyName: string;
-        CompanyAddress: string;
-        EmployeeID: string;
-        LastDesignation: string;
-        StartDate: string;
-        EndDate: string;
-    };
+    CompanyName: string;
+    CompanyAddress: string;
+    EmployeeID: string;
+    LastDesignation: string;
+    StartDate: string;
+    EndDate: string;
+
 };
 
 /**

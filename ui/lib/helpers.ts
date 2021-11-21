@@ -251,12 +251,12 @@ export const preparePersonalInformation = (
 export const prepareCollegeDegreeInformation = (
     degreeData: CollegeDegreeDetails
 ): CollegeDegreeInfo => ({
-    collegeName: degreeData.CollegeDegreeData.CollegeName,
-    registrationNumber: degreeData.CollegeDegreeData.RegistrationNumber,
-    program: degreeData.CollegeDegreeData.Program,
-    branch: degreeData.CollegeDegreeData.Branch,
-    enrollingYear: degreeData.CollegeDegreeData.EnrollingYear,
-    graduationYear: degreeData.CollegeDegreeData.GraduationYear
+    collegeName: degreeData.CollegeName,
+    registrationNumber: degreeData.RegistrationNumber,
+    program: degreeData.Program,
+    branch: degreeData.Branch,
+    enrollingYear: degreeData.EnrollingYear,
+    graduationYear: degreeData.GraduationYear
 });
 
 /**
@@ -271,12 +271,12 @@ export const prepareCollegeDegreeInformation = (
 export const prepareEmploymentHistory = (
     employmentData: EmploymentHistoryDetails
 ): EmploymentHistoryInfo => ({
-    companyName: employmentData.Employer.CompanyName,
-    companyAddress: employmentData.Employer.CompanyAddress,
-    employeeID: employmentData.Employer.EmployeeID,
-    lastDesignation: employmentData.Employer.LastDesignation,
-    startDate: employmentData.Employer.StartDate,
-    endDate: employmentData.Employer.EndDate
+    companyName: employmentData.CompanyName,
+    companyAddress: employmentData.CompanyAddress,
+    employeeID: employmentData.EmployeeID,
+    lastDesignation: employmentData.LastDesignation,
+    startDate: employmentData.StartDate,
+    endDate: employmentData.EndDate
 });
 
 /**
