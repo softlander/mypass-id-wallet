@@ -4,7 +4,6 @@
     "bundledWebRuntime": true,
     "npmClient": "yarn",
     "webDir": ".build",
-    "linuxAndroidStudioPath": "/home/sanjay/Apps/android-studio/bin/studio.sh",
     "plugins": {
         "SplashScreen": {
             "launchShowDuration": 3000,
