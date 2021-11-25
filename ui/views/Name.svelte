@@ -271,8 +271,8 @@
     }
 
     img {
-        width: 30vh;
-        height: 30vh;
+        width: 34vh;
+        height: 34vh;
     }
 
     .info {

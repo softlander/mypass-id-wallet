@@ -4,14 +4,13 @@
 
 <style>
     .container {
-        height: 22vh;
+        height: 20vh;
         width: 100%;
         padding: 0 8vw;
     }
 
     .logo {
         text-align: center;
-        /* padding: 1vh 8vw 4vh; */
     }
 
     img  {
