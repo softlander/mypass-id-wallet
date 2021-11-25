@@ -23,7 +23,7 @@
     }
 
     header {
-        background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
+        background: linear-gradient(149.28deg, #EA4335 18.55%, #c21807 85.04%);
         display: flex;
         align-items: center;
         justify-content: center;

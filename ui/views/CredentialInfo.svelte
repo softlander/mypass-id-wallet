@@ -160,7 +160,7 @@
     }
 
     .logo-personal {
-        background: #7d83ff;
+        background: #d9381e;
     }
 
     .logo-immunity {
@@ -168,15 +168,15 @@
     }
 
     .logo-collegeDegree {
-        background: #1b65d0;
+        background: #ff6347;
     }
 
     .logo-employment {
-        background: #4db6ac;
+        background: #d9381e;
     }
 
     .logo-jobOffer {
-        background: #4db6ac;
+        background: #ff2800;
     }
 
     .logo-visa {

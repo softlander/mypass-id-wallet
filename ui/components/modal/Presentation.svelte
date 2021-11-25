@@ -63,7 +63,7 @@
         min-height: 50vh;
         width: 100%;
         background: #ffffff;
-        box-shadow: 0px 4px 12px #1658b8;
+        box-shadow: 0px 4px 12px #EA4335;
         border-radius: 4vw;
         display: flex;
         padding: 3vh 7vw 2.5vh 7vw;

@@ -63,11 +63,11 @@
         --input-border: #eedcd9;
         --input-placeholder: #9ca1ab;
         --input-active: #bb362a;
+        
+        --qr: #d21f3c;
+        --qr-bg: #EA4335;
 
-        --qr: #13c4a3;
-        --qr-bg: #1b65d0;
-
-        --splash-bg: linear-gradient(91.35deg, #1b65d0 9.6%, #1962cb 88.79%);
+        --splash-bg: linear-gradient(91.35deg, white 9.6%, #EA4335 88.79%);
     }
 
     :global(*, *:after, *:before) {
