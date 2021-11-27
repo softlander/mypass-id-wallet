@@ -16,5 +16,5 @@
 </style>
 
 <div>
-    <img src="selv-splash-logo.png" alt="" />
+    <img src="mypass-splash-logo.png" alt="" />
 </div>
