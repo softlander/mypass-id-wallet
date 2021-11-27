@@ -1,4 +1,4 @@
-# myPass Demo
+# myPass.ID Mobile Wallet Demo
 
 ## Run in development mode
 
@@ -45,3 +45,6 @@ and open `http://localhost:3001` in your favourite browser.
 To build application for iOS or android, some additional [dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies) need to be installed.
 
 To start the build process, run `yarn ios` or `yarn android`.
+
+## Credits
+We acknowledge and are grateful to **IOTA Identity** team and their [open sorce project](https://github.com/iotaledger/identity.rs). This work is adopted for our use case scenario from **IOTA Identity** team's [selv-mobile project](https://github.com/iotaledger/selv-mobile).
