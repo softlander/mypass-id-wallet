@@ -19,7 +19,7 @@ curl -o- -L https://yarnpkg.com/install.sh | bash
 Clone repository by running:
 
 ```
-git clone https://github.com/iotaledger/poc-dinaas.git
+git clone https://github.com/mypass-id/demo-mobile-app.git
 ```
 
 #### 4. Install dependencies

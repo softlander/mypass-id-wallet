@@ -1,1 +1,1 @@
-app_identifier("com.iota.covid.demo") # The bundle identifier of your app
+app_identifier("com.mypass.id.demo") # The bundle identifier of your app

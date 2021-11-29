@@ -1,6 +1,6 @@
 {
-    "appId": "com.iota.selv.demo",
-    "appName": "Selv",
+    "appId": "com.mypass.id.demo",
+    "appName": "myPass",
     "bundledWebRuntime": true,
     "npmClient": "yarn",
     "webDir": ".build",
