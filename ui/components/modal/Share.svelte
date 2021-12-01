@@ -319,7 +319,7 @@
                     alias: "personal",
                     heading: "Home Office",
                     subheading: "My Identity",
-                    icon: "government-logo.png"
+                    icon: "personal-logo.png"
                 });
             } else if (credential === "TestResult") {
                 acc.push({
@@ -496,21 +496,21 @@
     }
 
     .icon-personal {
-        background: #7d83ff;
+        background: #EA4335;
     }
 
     .icon-authority {
-        background: #c995f1;
+        background: #EA4335;
     }
 
     .icon-degree {
-        background: #c995f1;
+        background: #EA4335;
     }
     .icon-employment {
-        background: #c995f1;
+        background: #EA4335;
     }
     .icon-job {
-        background: #c995f1;
+        background: #EA4335;
     }
 
     .icon-company,

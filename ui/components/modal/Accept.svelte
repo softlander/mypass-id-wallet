@@ -591,7 +591,7 @@
     .icon {
         height: 7.5vh;
         width: 7.5vh;
-        background: #13c4a3;
+        background: #EA4335;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -600,27 +600,27 @@
     }
 
     .icon-immunity {
-        background: #13c4a3;
+        background: #EA4335;
     }
 
     .icon-collegeDegree {
-        background: #13c4a3;
+        background: #EA4335;
     }
 
     .icon-employmentHistory {
-        background: #13c4a3;
+        background: #EA4335;
     }
 
     .icon-jobOffer {
-        background: #13c4a3;
+        background: #EA4335;
     }
 
     .icon-visa {
-        background: #102e68;
+        background: #EA4335;
     }
 
     .icon > img {
-        width: 55%;
+        width: 100%;
     }
 
     h5 {

@@ -39,7 +39,7 @@
 
     function getImageSrc(name) {
         if (name === "personal") {
-            return "government-logo.png";
+            return "personal-logo.png";
         } else if (name === "collegeDegree") {
             return "degree-logo.png";
         } else if (name === "employmentHistory") {
@@ -191,7 +191,7 @@
 
     .credential-info {
         width: 100%;
-        background-color: #BF0A30;
+        background-color: #EA4335;
         border-radius: 100%;
     }
 </style>
