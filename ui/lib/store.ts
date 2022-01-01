@@ -221,7 +221,7 @@ export const qrCode = writable<string>('');
 
 export const defaultCredentials: Credentials = {
     personal: {
-        heading: 'Home Office',
+        heading: 'Personal',
         subheading: 'My Identity',
         data: null
     },
@@ -237,7 +237,7 @@ export const defaultCredentials: Credentials = {
     },
     jobOffer: {
         heading: 'Job Offer',
-        subheading: 'Offer Details',
+        subheading: 'Offer Letter',
         data: null
     },
     immunity: {

@@ -317,7 +317,7 @@
             if (credential === "PersonalData") {
                 acc.push({
                     alias: "personal",
-                    heading: "Home Office",
+                    heading: "Personal",
                     subheading: "My Identity",
                     icon: "personal-logo.png"
                 });
@@ -346,7 +346,7 @@
                 acc.push({
                     alias: "job",
                     heading: "Job Offer",
-                    subheading: "Offer Details",
+                    subheading: "Offer Letter",
                     icon: "job-offer-logo.png"
                 });
             } else if (credential === "Company") {
