@@ -1,6 +1,6 @@
 {
-    "appId": "com.mypass.id.demo",
-    "appName": "myPass",
+    "appId": "com.mypass.id.wallet",
+    "appName": "myPass ID Wallet",
     "bundledWebRuntime": true,
     "npmClient": "yarn",
     "webDir": ".build",

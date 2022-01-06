@@ -1,4 +1,4 @@
-package com.mypass.id.demo;
+package com.mypass.id.wallet;
 
 import android.os.Bundle;
 

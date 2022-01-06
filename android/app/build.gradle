@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.mypass.id.demo"
+        applicationId "com.mypass.id.wallet"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 16

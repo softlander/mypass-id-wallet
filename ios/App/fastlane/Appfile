@@ -1,1 +1,1 @@
-app_identifier("com.mypass.id.demo") # The bundle identifier of your app
+app_identifier("com.mypass.id.wallet") # The bundle identifier of your app

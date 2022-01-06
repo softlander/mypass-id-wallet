@@ -1,5 +1,6 @@
-# myPass.ID Mobile Wallet Demo
+# myPass ID Wallet Mobile App
 
+> ⚠️ This app is meant for demonstration purpose only, please don't use this as production ready application.
 ## Run in development mode
 
 #### 1. Install Node.JS

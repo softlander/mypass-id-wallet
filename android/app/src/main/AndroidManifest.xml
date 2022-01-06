@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mypass.id.demo">
+    package="com.mypass.id.wallet">
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:name="com.mypass.id.demo.MainActivity"
+            android:name="com.mypass.id.wallet.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
