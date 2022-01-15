@@ -14,7 +14,7 @@
 
     const info = [
         {
-            header: "myPass.ID stores your personal credentials",
+            header: "myPass ID Wallet stores your personal credentials",
             content:
                 "A secure store for your personal data, only accessible to you.",
             footer: "Next"
@@ -28,7 +28,7 @@
         {
             header: "You control access to your data",
             content:
-                "mPass.ID is all about controlling your personal data, not locking it up. You decide who you share your data with.",
+                "myPass ID Wallet is all about controlling your personal data, not locking it up. You decide who you share your data with.",
             footer: "Continue"
         }
     ];

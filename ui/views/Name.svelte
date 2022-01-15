@@ -222,8 +222,8 @@
         </div>
 
         <p class="info">
-            myPass.ID will generate you an identity using randomised personal
-            information.
+            myPass ID Wallet will generate you an identity using randomised
+            personal information.
         </p>
 
         <TextField

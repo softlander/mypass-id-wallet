@@ -45,7 +45,7 @@
         },
         newEmployer: {
             heading:
-                "Do you want to share these credentials with your new employer?",
+                "Do you want to share these credentials with employers in job portal?",
             label: "Share credentials",
             closeText: "Cancel"
         },
@@ -496,21 +496,21 @@
     }
 
     .icon-personal {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-authority {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-degree {
-        background: #EA4335;
+        background: #ea4335;
     }
     .icon-employment {
-        background: #EA4335;
+        background: #ea4335;
     }
     .icon-job {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-company,
