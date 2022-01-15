@@ -42,7 +42,7 @@
 
     const content = {
         collegeDegree: {
-            heading: "Accept certificate?",
+            heading: "Accept college degree?",
             listItems: [
                 {
                     heading: "Education",
@@ -54,7 +54,7 @@
             closeText: "Decline"
         },
         employmentHistory: {
-            heading: "Accept certificate?",
+            heading: "Accept job experience letter?",
             listItems: [
                 {
                     heading: "Employment History",
@@ -62,11 +62,11 @@
                     icon: "employment-logo.png"
                 }
             ],
-            label: "Accept certificate",
+            label: "Accept letter",
             closeText: "Decline"
         },
         jobOffer: {
-            heading: "Accept certificate?",
+            heading: "Accept job offer?",
             listItems: [
                 {
                     heading: "Job Offer",
@@ -74,7 +74,7 @@
                     icon: "job-offer-logo.png"
                 }
             ],
-            label: "Accept certificate",
+            label: "Accept offer",
             closeText: "Decline"
         },
         immunity: {
@@ -591,7 +591,7 @@
     .icon {
         height: 7.5vh;
         width: 7.5vh;
-        background: #EA4335;
+        background: #ea4335;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -600,23 +600,23 @@
     }
 
     .icon-immunity {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-collegeDegree {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-employmentHistory {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-jobOffer {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon-visa {
-        background: #EA4335;
+        background: #ea4335;
     }
 
     .icon > img {

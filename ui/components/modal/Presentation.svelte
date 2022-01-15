@@ -1,28 +1,80 @@
 <script>
-    import QRCode from 'qrcode-svg';
-    import { onDestroy, onMount, setContext, getContext } from 'svelte';
+    import QRCode from "qrcode-svg";
+    import { onDestroy, onMount, setContext, getContext } from "svelte";
 
-    import { goto, detectSwipeGesture } from '~/lib/helpers';
+    import { goto, detectSwipeGesture } from "~/lib/helpers";
 
-    import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
+    import {
+        activeCredentialForInfo,
+        credentials,
+        qrCode,
+        modalStatus
+    } from "~/lib/store";
 
     onMount(() => {
         const deviceHeight = document.documentElement.clientHeight;
         qrCode.set(
             new QRCode({
                 content: JSON.stringify($credentials.personal.data),
-                color: '#13C4A3',
+                color: "#13C4A3",
                 height: deviceHeight * 0.3,
                 width: deviceHeight * 0.3
             }).svg()
         );
-        detectSwipeGesture('wrapper', 'swipedown', () => goBack());
+        detectSwipeGesture("wrapper", "swipedown", () => goBack());
     });
 
     function goBack() {
         modalStatus.set({ active: false, type: null });
     }
+
+    function prettyCredentialType(credentialType) {
+        switch (credentialType) {
+            case "personal":
+                return "Personal Details";
+            case "immunity":
+                return "Test Result";
+            case "collegeDegree":
+                return "College Degree";
+            case "employmentHistory":
+                return "Experience Letter";
+            case "jobOffer":
+                return "Job Offer";
+            case "company":
+                return "Company";
+            case "bank":
+                return "Bank Account";
+            case "insurance":
+                return "Insurance";
+            case "futureCommitments":
+                return "Future Commitment";
+            case "presentCommitments":
+                return "Present Commitment";
+            default:
+                return "Certificate";
+        }
+    }
 </script>
+
+<main id="wrapper">
+    <img class="icon" on:click={goBack} src="chevron-left.svg" alt="" />
+
+    <img class="avatar" src="person.png" alt="" />
+
+    <header>
+        <p>
+            {$credentials.personal.data.firstName}
+            {$credentials.personal.data.lastName}
+        </p>
+    </header>
+
+    <section class="qr">
+        <h6>Your {prettyCredentialType($activeCredentialForInfo)}</h6>
+        <p>Valid until May 31, 2030</p>
+
+        <div contenteditable="false" bind:innerHTML={$qrCode} />
+    </section>
+</main>
 
 <style>
     main {
@@ -40,7 +92,7 @@
     }
 
     header > p {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-weight: bold;
         font-size: 7.5vw;
         line-height: 8vw;
@@ -49,7 +101,7 @@
     }
 
     section > p {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         font-style: normal;
         font-weight: 800;
         font-size: 3vw;
@@ -63,7 +115,7 @@
         min-height: 50vh;
         width: 100%;
         background: #ffffff;
-        box-shadow: 0px 4px 12px #EA4335;
+        box-shadow: 0px 4px 12px #ea4335;
         border-radius: 4vw;
         display: flex;
         padding: 3vh 7vw 2.5vh 7vw;
@@ -79,7 +131,7 @@
     }
 
     h6 {
-        font-family: 'Metropolis', sans-serif;
+        font-family: "Metropolis", sans-serif;
         font-style: normal;
         font-weight: 600;
         font-size: 5vw;
@@ -93,20 +145,3 @@
         width: 17vh;
     }
 </style>
-
-<main id="wrapper">
-    <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
-
-    <img class="avatar" src="person.png" alt="" />
-
-    <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
-    </header>
-
-    <section class="qr">
-        <h6>Your {$activeCredentialForInfo} certificate</h6>
-        <p>Valid until May 30, 2020</p>
-
-        <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
-    </section>
-</main>
